@@ -2463,6 +2463,10 @@ figcaption {
 .btn-ghost:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
 .btn-icon { width: 36px; height: 36px; padding: 0; }
 .btn-block { width: 100%; margin-top: var(--space-2); justify-content: flex-start; text-align: left; }
+.song-soft .btn { border-radius: 14px; }
+.song-soft .btn-icon { border-radius: 50%; }
+.song-soft .input, .song-soft textarea.input, .song-soft select.input { border-radius: 12px; }
+.song-soft .seg { border-radius: 999px; }
 
 /* — forms — */
 .field > label {
@@ -2477,6 +2481,10 @@ figcaption {
 }
 .input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
 .input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.lyr-edit { caret-color: var(--flash); }
+textarea.lyr-edit.lyr-thick { caret-color: transparent; }
+.lyr-caret-bar { position: fixed; width: 3px; border-radius: 1px; pointer-events: none; z-index: 80; animation: lyrCaretBlink 1.05s step-end infinite; }
+@keyframes lyrCaretBlink { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
 textarea.input { min-height: 90px; resize: vertical; }
 .radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
 .radio input, .seg-opt input {
@@ -2621,10 +2629,10 @@ const __ds_scope = {};
 <button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ exitPresent }}" aria-label="Exit present mode" style="width:40px;height:40px;color:var(--color-text);margin-right:4px"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3"></path><path d="M21 8h-3a2 2 0 0 1-2-2V3"></path><path d="M3 16h3a2 2 0 0 1 2 2v3"></path><path d="M16 21v-3a2 2 0 0 1 2-2h3"></path></svg></button>
 </sc-if>
 <sc-if value="{{ onSong }}" hint-placeholder-val="{{ false }}">
-<button class="btn btn-secondary" sc-camel-on-click="{{ newSong }}" style="gap:8px;justify-content:flex-start"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>{{ t.newSong }}</button>
+<button class="btn btn-secondary" sc-camel-on-click="{{ newSong }}" style="gap:8px;justify-content:flex-start;border-radius:18px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>{{ t.newSong }}</button>
 </sc-if>
 <sc-if value="{{ onMetronome }}" hint-placeholder-val="{{ true }}">
-<button class="btn btn-secondary" sc-camel-on-click="{{ openSave }}" style="gap:8px;justify-content:flex-start">
+<button class="btn btn-secondary" sc-camel-on-click="{{ openSave }}" style="gap:8px;justify-content:flex-start;border-radius:18px">
 <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path><path d="M7 3v4a1 1 0 0 0 1 1h7"></path></svg>
 {{ t.save }}</button>
 </sc-if>
@@ -2648,27 +2656,28 @@ const __ds_scope = {};
 </div></sc-if>
 <sc-if value="{{ noSlider }}" hint-placeholder-val="{{ false }}"><div style="height:14px"></div></sc-if>
 
-<div style="display:grid;grid-template-columns:{{ tempoCols }};border-top:2px solid var(--color-divider);border-bottom:2px solid var(--color-divider)">
-<button class="btn" sc-camel-on-pointer-down="{{ minusDown }}" sc-camel-on-pointer-up="{{ holdEnd }}" sc-camel-on-pointer-leave="{{ holdCancel }}" sc-camel-on-pointer-cancel="{{ holdCancel }}" sc-camel-on-context-menu="{{ noMenu }}" aria-label="Decrease tempo — hold for steps of 10" style="height:64px;justify-content:flex-start;gap:10px;border-radius:0;touch-action:none;user-select:none;border-right:1px solid var(--color-divider)"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path></svg><span style="font-size:11px;font-weight:600;color:var(--muted)">{{ t.hold }}</span></button>
-<sc-if value="{{ show.tap }}" hint-placeholder-val="{{ true }}"><button class="btn" sc-camel-on-click="{{ tap }}" style="height:64px;justify-content:flex-start;border-radius:0;border-right:1px solid var(--color-divider);background:var(--color-surface);color:var(--acc-text)">{{ t.tap }}</button></sc-if>
-<button class="btn" sc-camel-on-pointer-down="{{ plusDown }}" sc-camel-on-pointer-up="{{ holdEnd }}" sc-camel-on-pointer-leave="{{ holdCancel }}" sc-camel-on-pointer-cancel="{{ holdCancel }}" sc-camel-on-context-menu="{{ noMenu }}" aria-label="Increase tempo — hold for steps of 10" style="height:64px;justify-content:flex-start;gap:10px;border-radius:0;touch-action:none;user-select:none;"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size:11px;font-weight:600;color:var(--muted)">{{ t.hold }}</span></button>
+<div style="display:grid;grid-template-columns:{{ tempoCols }};gap:8px;padding:0 16px 14px">
+<button class="btn" sc-camel-on-pointer-down="{{ minusDown }}" sc-camel-on-pointer-up="{{ holdEnd }}" sc-camel-on-pointer-leave="{{ holdCancel }}" sc-camel-on-pointer-cancel="{{ holdCancel }}" sc-camel-on-context-menu="{{ noMenu }}" aria-label="Decrease tempo — hold for steps of 10" style="height:56px;justify-content:center;gap:8px;border-radius:18px;border:1.5px solid var(--color-divider);background:var(--color-surface);touch-action:none;user-select:none"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path></svg><span style="font-size:11px;font-weight:600;color:var(--muted)">{{ t.hold }}</span></button>
+<sc-if value="{{ show.tap }}" hint-placeholder-val="{{ true }}"><button class="btn" sc-camel-on-click="{{ tap }}" style="height:56px;justify-content:center;border-radius:18px;border:1.5px solid var(--color-divider);background:var(--color-surface);color:var(--acc-text)">{{ t.tap }}</button></sc-if>
+<button class="btn" sc-camel-on-pointer-down="{{ plusDown }}" sc-camel-on-pointer-up="{{ holdEnd }}" sc-camel-on-pointer-leave="{{ holdCancel }}" sc-camel-on-pointer-cancel="{{ holdCancel }}" sc-camel-on-context-menu="{{ noMenu }}" aria-label="Increase tempo — hold for steps of 10" style="height:56px;justify-content:center;gap:8px;border-radius:18px;border:1.5px solid var(--color-divider);background:var(--color-surface);touch-action:none;user-select:none"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size:11px;font-weight:600;color:var(--muted)">{{ t.hold }}</span></button>
 </div>
 <sc-if value="{{ show.trainer }}" hint-placeholder-val="{{ true }}">
-<button sc-camel-on-click="{{ trToggle }}" role="switch" aria-checked="{{ trOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;min-height:60px">
-<span style="display:flex;flex-direction:column;gap:2px;margin-right:auto;min-width:0"><span style="font-weight:800;font-size:16px">{{ t.trainer }}</span><span style="font-size:13px;color:var(--muted);text-wrap:pretty">{{ trNote }}</span></span>
-<span style="flex:none;width:48px;height:28px;border:2px solid {{ trSw.bd }};background:{{ trSw.track }};display:flex;justify-content:{{ trSw.justify }};align-items:center;padding:2px;box-sizing:border-box;transition:background 120ms"><span style="width:20px;height:20px;background:{{ trSw.knob }}"></span></span>
+<div style="margin:0 16px 12px;padding:12px 14px;background:{{ trBg }};border:1.5px solid {{ trBd }};border-radius:18px">
+<button sc-camel-on-click="{{ trToggle }}" role="switch" aria-checked="{{ trOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;min-height:44px">
+<span style="display:flex;flex-direction:column;gap:2px;margin-right:auto;min-width:0"><span style="font-weight:800;font-size:16px;color:{{ trFg }}">{{ t.trainer }}</span><span style="font-size:13px;color:var(--muted);text-wrap:pretty">{{ trNote }}</span></span>
+<span aria-hidden="true" style="flex:none;width:44px;height:26px;border-radius:999px;border:1.5px solid {{ trSw.bd }};background:{{ trSw.track }};display:flex;justify-content:{{ trSw.justify }};align-items:center;padding:2px;box-sizing:border-box"><span style="width:18px;height:18px;border-radius:50%;background:{{ trSw.knob }}"></span></span>
 </button>
-<sc-if value="{{ trOn }}"><div style="padding:0 16px 14px;display:flex;flex-direction:column;gap:6px">
+<sc-if value="{{ trOn }}"><div style="padding-top:10px;display:flex;flex-direction:column;gap:8px">
 <sc-for list="{{ trSteppers }}" as="st"><div style="display:flex;align-items:center;gap:12px">
 <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-right:auto">{{ st.label }}</span>
-<div style="display:flex;align-items:center;border:2px solid var(--color-divider);width:180px;flex:none">
-<button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ st.dec }}" aria-label="{{ st.decAria }}" style="width:44px;height:44px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path></svg></button>
-<span style="flex:1;min-width:0;font-weight:800;font-size:16px;padding-left:4px;white-space:nowrap">{{ st.value }}</span>
-<button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ st.inc }}" aria-label="{{ st.incAria }}" style="width:44px;height:44px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+<div style="display:flex;align-items:center;border:1.5px solid var(--color-divider);border-radius:999px;overflow:hidden;background:var(--color-bg);width:180px;flex:none">
+<button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ st.dec }}" aria-label="{{ st.decAria }}" style="width:40px;height:36px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path></svg></button>
+<span style="flex:1;min-width:0;font-weight:800;font-size:15px;text-align:center;white-space:nowrap">{{ st.value }}</span>
+<button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ st.inc }}" aria-label="{{ st.incAria }}" style="width:40px;height:36px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
 </div>
 </div></sc-for>
 </div></sc-if>
-<div style="border-bottom:2px solid var(--color-divider)"></div>
+</div>
 </sc-if>
 </div>
 <div style="display:flex;flex-direction:column;min-width:0">
@@ -2677,23 +2686,23 @@ const __ds_scope = {};
 <h6 style="margin:0">{{ t.beatsTap }}</h6>
 <span style="font-size:11px;color:var(--muted)">{{ beatLegend }}</span>
 </div>
-<div style="display:grid;grid-template-columns:{{ beatCols }};gap:4px">
+<div style="display:grid;grid-template-columns:{{ beatCols }};gap:8px">
 <sc-for list="{{ beatCells }}" as="b" hint-placeholder-count="4">
-<div style="display:flex;flex-direction:column;gap:3px;min-width:0">
-<button sc-camel-on-click="{{ b.cycle }}" aria-label="{{ b.aria }}" style="height:{{ b.h }};border:2px solid {{ b.border }};background:{{ b.bg }};color:{{ b.fg }};border-radius:0;padding:6px 7px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;cursor:pointer;font-family:var(--font-heading);transition:background 60ms">
+<div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+<button sc-camel-on-click="{{ b.cycle }}" aria-label="{{ b.aria }}" style="height:{{ b.h }};border:1.5px solid {{ b.border }};background:{{ b.bg }};color:{{ b.fg }};border-radius:16px;padding:8px 8px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;cursor:pointer;font-family:var(--font-heading);transition:background 60ms">
 <span style="font-weight:800;font-size:18px;line-height:1">{{ b.n }}</span>
 <span style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase">{{ b.word }}</span>
 </button>
 <sc-if value="{{ show.strum }}" hint-placeholder-val="{{ true }}"><div style="display:flex;gap:2px">
 <sc-for list="{{ b.strums }}" as="u"><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
 <span style="height:12px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1;color:{{ u.cfg }}">{{ u.count }}</span>
-<select class="input" value="{{ u.sVal }}" sc-camel-on-change="{{ u.sChange }}" aria-label="{{ u.aria }}" style="width:100%;min-height:32px;height:32px;font-size:16px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.bg }};color:{{ u.fg }};border:1.5px solid {{ u.bd }};border-radius:0">
+<select class="input" value="{{ u.sVal }}" sc-camel-on-change="{{ u.sChange }}" aria-label="{{ u.aria }}" style="width:100%;min-height:32px;height:32px;font-size:16px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.bg }};color:{{ u.fg }};border:1.5px solid {{ u.bd }};border-radius:10px">
 <option value="">–</option>
 <option value="D">↓</option>
 <option value="U">↑</option>
 </select>
 <sc-if value="{{ pluckOn }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:2px">
-<select class="input" value="{{ u.pVal }}" sc-camel-on-change="{{ u.pChange }}" aria-label="{{ u.pAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.pBg }};color:{{ u.pFg }};border:1.5px solid {{ u.pBd }};border-radius:0">
+<select class="input" value="{{ u.pVal }}" sc-camel-on-change="{{ u.pChange }}" aria-label="{{ u.pAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.pBg }};color:{{ u.pFg }};border:1.5px solid {{ u.pBd }};border-radius:10px">
 <option value="">–</option>
 <option value="6">6E</option>
 <option value="5">5A</option>
@@ -2702,7 +2711,7 @@ const __ds_scope = {};
 <option value="2">2B</option>
 <option value="1">1e</option>
 </select>
-<select class="input" value="{{ u.qVal }}" sc-camel-on-change="{{ u.qChange }}" aria-label="{{ u.qAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.qBg }};color:{{ u.qFg }};border:1.5px solid {{ u.qBd }};border-radius:0">
+<select class="input" value="{{ u.qVal }}" sc-camel-on-change="{{ u.qChange }}" aria-label="{{ u.qAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.qBg }};color:{{ u.qFg }};border:1.5px solid {{ u.qBd }};border-radius:10px">
 <option value="">–</option>
 <option value="6">6E</option>
 <option value="5">5A</option>
@@ -2715,39 +2724,37 @@ const __ds_scope = {};
 </div></sc-for>
 </div></sc-if>
 <sc-if value="{{ showSubMarks }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:2px">
-<sc-for list="{{ b.subs }}" as="u"><span style="flex:1;min-width:0;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:1.5px solid {{ u.bd }};background:{{ u.bg }};color:{{ u.fg }}">{{ u.label }}</span></sc-for>
+<sc-for list="{{ b.subs }}" as="u"><span style="flex:1;min-width:0;height:20px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:1.5px solid {{ u.bd }};background:{{ u.bg }};color:{{ u.fg }}">{{ u.label }}</span></sc-for>
 </div></sc-if>
 </div>
 </sc-for>
 </div>
-<sc-if value="{{ show.strum }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:12px;margin-top:8px">
-<span style="font-size:12px;color:var(--muted);margin-right:auto">{{ t.strumHint }}</span>
-<button sc-camel-on-click="{{ toggleStrumSnd }}" aria-pressed="{{ strumSndOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;height:32px;padding:0 10px;font-weight:800;font-size:13px;background:{{ sndBg }};color:{{ sndFg }};border:2px solid {{ sndBd }}">{{ t.strumSnd }}</button>
-<button sc-camel-on-click="{{ togglePluck }}" aria-pressed="{{ pluckOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;height:32px;padding:0 10px;font-weight:800;font-size:13px;background:{{ pBg }};color:{{ pFg }};border:2px solid {{ pBd }}">{{ t.pluck }}</button>
-<button class="btn btn-ghost" sc-camel-on-click="{{ clearStrum }}" style="padding:6px 8px;font-size:13px;min-height:32px">{{ t.clear }}</button>
+<sc-if value="{{ show.strum }}" hint-placeholder-val="{{ true }}"><div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:10px">
+<button sc-camel-on-click="{{ toggleStrumSnd }}" aria-pressed="{{ strumSndOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:44px;padding:0 12px;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:800;font-size:15px;background:{{ sndBg }};color:{{ sndFg }};border:1.5px solid {{ sndBd }};border-radius:18px">{{ t.strumSnd }}</button>
+<button sc-camel-on-click="{{ togglePluck }}" aria-pressed="{{ pluckOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:44px;padding:0 12px;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-weight:800;font-size:15px;background:{{ pBg }};color:{{ pFg }};border:1.5px solid {{ pBd }};border-radius:18px">{{ t.pluck }}</button>
+<button class="btn btn-ghost" sc-camel-on-click="{{ clearStrum }}" style="padding:0 14px;font-size:15px;height:44px;min-height:44px;border-radius:18px;white-space:nowrap">{{ t.clear }}</button>
 </div>
-<sc-if value="{{ pluckOn }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--muted);margin-top:6px">{{ t.pluckHint }}</div></sc-if>
 </sc-if>
 </div></sc-if>
 
 <div style="padding:16px 16px 4px;display:flex;align-items:center;gap:16px">
 <h6 style="margin:0;margin-right:auto">{{ t.timeSig }}</h6>
 <div style="display:flex;align-items:center;gap:2px">
-<button class="btn btn-secondary btn-icon" sc-camel-on-click="{{ beatsDown }}" aria-label="Fewer beats" style="width:44px;height:44px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path></svg></button>
-<div style="font-family:var(--font-heading);font-weight:800;font-size:40px;line-height:1;letter-spacing:-0.03em;min-width:84px;text-align:left;padding-left:8px;font-variant-numeric:tabular-nums">{{ sigLabel }}</div>
-<button class="btn btn-secondary btn-icon" sc-camel-on-click="{{ beatsUp }}" aria-label="More beats" style="width:44px;height:44px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+<button class="btn btn-secondary btn-icon" sc-camel-on-click="{{ beatsDown }}" aria-label="Fewer beats" style="width:44px;height:44px;border-radius:50%"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path></svg></button>
+<div style="font-family:var(--font-heading);font-weight:800;font-size:40px;line-height:1;letter-spacing:-0.03em;min-width:84px;text-align:center;font-variant-numeric:tabular-nums">{{ sigLabel }}</div>
+<button class="btn btn-secondary btn-icon" sc-camel-on-click="{{ beatsUp }}" aria-label="More beats" style="width:44px;height:44px;border-radius:50%"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
 </div>
 </div>
 
 <sc-if value="{{ show.quick }}" hint-placeholder-val="{{ true }}"><div style="padding:10px 16px 4px;display:flex;flex-wrap:wrap;gap:6px">
 <sc-for list="{{ quickSigs }}" as="q" hint-placeholder-count="6">
-<button class="btn btn-secondary" sc-camel-on-click="{{ q.pick }}" style="padding:6px 10px;font-size:13px;background:{{ q.bg }};color:{{ q.fg }};border-color:{{ q.bd }}">{{ q.label }}</button>
+<button class="btn btn-secondary" sc-camel-on-click="{{ q.pick }}" style="padding:6px 12px;font-size:13px;border-radius:999px;background:{{ q.bg }};color:{{ q.fg }};border-color:{{ q.bd }}">{{ q.label }}</button>
 </sc-for>
 </div></sc-if>
 
 <sc-if value="{{ show.sub }}" hint-placeholder-val="{{ true }}"><div class="field" style="padding:16px 16px 20px">
 <label>{{ t.subdivision }}</label>
-<div class="seg" style="display:flex">
+<div class="seg" style="display:flex;border-radius:999px">
 <sc-for list="{{ subOpts }}" as="s" hint-placeholder-count="4">
 <label class="seg-opt" style="flex:1;padding:9px 8px;font-weight:600;background:{{ s.bg }};color:{{ s.fg }}"><input type="radio" name="sub" checked="{{ s.checked }}" sc-camel-on-change="{{ s.pick }}">{{ s.label }}</label>
 </sc-for>
@@ -2755,7 +2762,7 @@ const __ds_scope = {};
 </div></sc-if>
 <sc-if value="{{ show.strum }}" hint-placeholder-val="{{ true }}"><div class="field" style="padding:0 16px 20px">
 <label>{{ t.strumGrid }}</label>
-<div class="seg" style="display:flex">
+<div class="seg" style="display:flex;border-radius:999px">
 <sc-for list="{{ gridOpts }}" as="s" hint-placeholder-count="4">
 <label class="seg-opt" style="flex:1;padding:9px 8px;font-weight:600;background:{{ s.bg }};color:{{ s.fg }};opacity:{{ s.op }}"><input type="radio" name="grid" checked="{{ s.checked }}" disabled="{{ s.disabled }}" sc-camel-on-change="{{ s.pick }}">{{ s.label }}</label>
 </sc-for>
@@ -2767,7 +2774,7 @@ const __ds_scope = {};
 </div>
 
 <div style="flex:none;padding:0 16px 12px">
-<button class="btn btn-primary" sc-camel-on-click="{{ togglePlay }}" style="width:100%;height:60px;justify-content:space-between;font-size:18px;padding:0 18px;background:{{ playBg }};color:{{ playFg }}">
+<button class="btn btn-primary" sc-camel-on-click="{{ togglePlay }}" style="width:100%;height:56px;justify-content:space-between;font-size:18px;padding:0 22px;border-radius:999px;background:{{ playBg }};color:{{ playFg }};border-color:{{ playBg }}">
 <span>{{ playLabel }}</span>
 <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" sc-camel-view-box="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14"></rect></svg></sc-if>
 <sc-if value="{{ stopped }}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" sc-camel-view-box="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></sc-if>
@@ -2776,15 +2783,13 @@ const __ds_scope = {};
 </sc-if>
 
 <sc-if value="{{ onSong }}" hint-placeholder-val="{{ false }}">
+<div class="song-soft" style="flex:1;min-height:0;display:flex;flex-direction:column">
 <sc-if value="{{ songOff }}" hint-placeholder-val="{{ true }}">
 <div style="flex:1;overflow-y:auto;display:grid;grid-template-columns:{{ metroCols }};align-content:start">
 <div style="display:flex;flex-direction:column;min-width:0;border-right:{{ colBorder }}">
-<div style="padding:12px 16px 0">
-<button class="btn btn-primary" sc-camel-on-click="{{ saveCopy }}" style="width:100%;height:48px;justify-content:flex-start;gap:8px;background:var(--color-accent);color:var(--acc-ink)">{{ t.saveCopy }}</button>
-</div>
 <sc-if value="{{ songOff }}" hint-placeholder-val="{{ true }}">
 <sc-if value="{{ inSet }}" hint-placeholder-val="{{ false }}">
-<div style="padding:8px 16px;display:flex;align-items:center;gap:6px;background:var(--color-surface)">
+<div style="margin:10px 16px 0;padding:8px 8px 8px 14px;display:flex;align-items:center;gap:6px;background:var(--color-surface);border-radius:18px">
 <span style="font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--acc-text);margin-right:auto;white-space:nowrap">{{ setPos }}</span>
 <button class="btn btn-secondary btn-icon" sc-camel-on-click="{{ setPrev }}" disabled="{{ setPrevOff }}" aria-label="Previous song in set list" style="width:44px;height:44px;flex:none"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 18-6-6 6-6"></path></svg></button>
 <button class="btn btn-secondary" sc-camel-on-click="{{ setNext }}" disabled="{{ setNextOff }}" style="height:44px;justify-content:flex-start;gap:6px;min-width:0;max-width:62%"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">{{ setNextLabel }}</span><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 18 6-6-6-6"></path></svg></button>
@@ -2802,21 +2807,27 @@ const __ds_scope = {};
 <button class="btn btn-secondary btn-icon" sc-camel-on-pointer-down="{{ songMinusDown }}" sc-camel-on-pointer-up="{{ holdEnd }}" sc-camel-on-pointer-leave="{{ holdCancel }}" sc-camel-on-pointer-cancel="{{ holdCancel }}" sc-camel-on-context-menu="{{ noMenu }}" aria-label="Slower — hold for steps of 10" style="width:48px;height:48px;touch-action:none;user-select:none"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path></svg></button>
 <button class="btn btn-secondary btn-icon" sc-camel-on-pointer-down="{{ songPlusDown }}" sc-camel-on-pointer-up="{{ holdEnd }}" sc-camel-on-pointer-leave="{{ holdCancel }}" sc-camel-on-pointer-cancel="{{ holdCancel }}" sc-camel-on-context-menu="{{ noMenu }}" aria-label="Faster — hold for steps of 10" style="width:48px;height:48px;touch-action:none;user-select:none"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
 </div>
-<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--color-divider);border-bottom:2px solid var(--color-divider)">
-<div style="padding:10px 16px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.sections }}</div><div style="font-weight:800;font-size:22px">{{ secCount }}</div></div>
-<div style="padding:10px 12px;border-left:1px solid var(--color-divider)"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.bars }}</div><div style="font-weight:800;font-size:22px">{{ totalBars }}</div></div>
-<div style="padding:10px 12px;border-left:1px solid var(--color-divider)"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.length }}</div><div style="font-weight:800;font-size:22px">{{ songLength }}</div></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 16px 4px">
+<div style="padding:10px 12px;background:var(--color-surface);border-radius:16px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.sections }}</div><div style="font-weight:800;font-size:22px">{{ secCount }}</div></div>
+<div style="padding:10px 12px;background:var(--color-surface);border-radius:16px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.bars }}</div><div style="font-weight:800;font-size:22px">{{ totalBars }}</div></div>
+<div style="padding:10px 12px;background:var(--color-surface);border-radius:16px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.length }}</div><div style="font-weight:800;font-size:22px">{{ songLength }}</div></div>
 </div>
 </sc-if>
-<button sc-camel-on-click="{{ toggleLyrics }}" role="switch" aria-checked="{{ lyricsOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:2px solid var(--color-divider);min-height:60px">
-<span style="display:flex;flex-direction:column;gap:2px;margin-right:auto"><span style="font-weight:800;font-size:16px">{{ t.lyricsSwitch }}</span><span style="font-size:13px;color:var(--muted)">{{ t.lyricsSwitchDesc }}</span></span>
-<span style="flex:none;width:48px;height:28px;border:2px solid {{ lyrSw.bd }};background:{{ lyrSw.track }};display:flex;justify-content:{{ lyrSw.justify }};align-items:center;padding:2px;box-sizing:border-box;transition:background 120ms"><span style="width:20px;height:20px;background:{{ lyrSw.knob }}"></span></span>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px 16px 4px">
+<button sc-camel-on-click="{{ toggleCursor }}" role="switch" aria-checked="{{ cursorOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 8px 10px;background:{{ cursorBg }};border:1.5px solid {{ cursorBd }};border-radius:18px">
+<span style="font-weight:800;font-size:14px;line-height:1.1;color:{{ cursorFg }};max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.cursorSwitch }}</span>
+<span aria-hidden="true" style="width:40px;height:22px;border-radius:999px;border:1.5px solid {{ cursorSw.bd }};background:{{ cursorSw.track }};display:flex;justify-content:{{ cursorSw.justify }};align-items:center;padding:1px;box-sizing:border-box"><span style="width:16px;height:16px;border-radius:50%;background:{{ cursorSw.knob }}"></span></span>
 </button>
-<button sc-camel-on-click="{{ toggleLyrFull }}" role="switch" aria-checked="{{ lyrFull }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:2px solid var(--color-divider);min-height:60px">
-<span style="display:flex;align-items:center;gap:12px;margin-right:auto;min-width:0"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M21 8V5a2 2 0 0 0-2-2h-3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path><path d="M3 16v3a2 2 0 0 0 2 2h3"></path></svg><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:800;font-size:16px">{{ t.lyrFullSwitch }}</span><span style="font-size:13px;color:var(--muted)">{{ t.lyrFullSwitchDesc }}</span></span></span>
-<span style="flex:none;width:48px;height:28px;border:2px solid {{ lyrFullSw.bd }};background:{{ lyrFullSw.track }};display:flex;justify-content:{{ lyrFullSw.justify }};align-items:center;padding:2px;box-sizing:border-box;transition:background 120ms"><span style="width:20px;height:20px;background:{{ lyrFullSw.knob }}"></span></span>
+<button sc-camel-on-click="{{ toggleLyrics }}" role="switch" aria-checked="{{ lyricsOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 8px 10px;background:{{ lyricsBg }};border:1.5px solid {{ lyricsBd }};border-radius:18px">
+<span style="font-weight:800;font-size:14px;line-height:1.1;color:{{ lyricsFg }};max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.lyricsSwitch }}</span>
+<span aria-hidden="true" style="width:40px;height:22px;border-radius:999px;border:1.5px solid {{ lyrSw.bd }};background:{{ lyrSw.track }};display:flex;justify-content:{{ lyrSw.justify }};align-items:center;padding:1px;box-sizing:border-box"><span style="width:16px;height:16px;border-radius:50%;background:{{ lyrSw.knob }}"></span></span>
 </button>
-<div style="padding:14px 16px 16px;border-bottom:2px solid var(--color-divider);display:flex;flex-direction:column;gap:12px">
+<button sc-camel-on-click="{{ toggleLyrFull }}" role="switch" aria-checked="{{ lyrFull }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 8px 10px;background:{{ fullBg }};border:1.5px solid {{ fullBd }};border-radius:18px">
+<span style="font-weight:800;font-size:14px;line-height:1.1;color:{{ fullFg }};max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.lyrFullSwitch }}</span>
+<span aria-hidden="true" style="width:40px;height:22px;border-radius:999px;border:1.5px solid {{ lyrFullSw.bd }};background:{{ lyrFullSw.track }};display:flex;justify-content:{{ lyrFullSw.justify }};align-items:center;padding:1px;box-sizing:border-box"><span style="width:16px;height:16px;border-radius:50%;background:{{ lyrFullSw.knob }}"></span></span>
+</button>
+</div>
+<div style="margin:12px 16px 0;padding:14px;border-radius:18px;background:var(--color-surface);display:flex;flex-direction:column;gap:12px">
 <div style="display:flex;align-items:baseline;gap:10px"><span style="font-weight:800;font-size:16px;margin-right:auto">{{ t.keyTitle }}</span><sc-if value="{{ kDirty }}"><span style="font-size:12px;font-weight:700;color:var(--acc-text)">{{ t.unsaved }}</span></sc-if></div>
 <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-family:var(--font-heading);font-weight:800;font-size:40px;line-height:1;letter-spacing:-0.02em">{{ kKey }}</span><span style="font-size:13px;color:var(--muted);text-wrap:pretty">{{ kNote }}</span></div>
 <label for="songkey" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.origKey }}</label>
@@ -2825,7 +2836,7 @@ const __ds_scope = {};
 <sc-for list="{{ keyOpts }}" as="ko"><option value="{{ ko.v }}">{{ ko.label }}</option></sc-for>
 </select>
 <div style="font-size:13px;font-weight:700;color:var(--acc-text);text-wrap:pretty">{{ keyFamily }}</div>
-<sc-if value="{{ kWarn }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px;padding:10px 12px;background:var(--color-surface)"><span style="font-size:13px;font-weight:600;text-wrap:pretty">{{ kWarnText }}</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-primary" sc-camel-on-click="{{ kWarnApply }}" style="height:44px;justify-content:flex-start;background:var(--color-accent);color:var(--acc-ink)">{{ kWarnUse }}</button><button class="btn btn-secondary" sc-camel-on-click="{{ kWarnDismiss }}" style="height:44px;justify-content:flex-start">{{ kWarnKeep }}</button></div></div></sc-if>
+<sc-if value="{{ kWarn }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px;padding:12px;background:var(--color-bg);border-radius:14px"><span style="font-size:13px;font-weight:600;text-wrap:pretty">{{ kWarnText }}</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-primary" sc-camel-on-click="{{ kWarnApply }}" style="height:44px;justify-content:flex-start;background:var(--color-accent);color:var(--acc-ink)">{{ kWarnUse }}</button><button class="btn btn-secondary" sc-camel-on-click="{{ kWarnDismiss }}" style="height:44px;justify-content:flex-start">{{ kWarnKeep }}</button></div></div></sc-if>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
 <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
 <label for="tpkey" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.transpose }}</label>
@@ -2848,7 +2859,7 @@ const __ds_scope = {};
 <button class="btn btn-primary" sc-camel-on-click="{{ kOpenSave }}" style="height:44px;justify-content:flex-start;background:var(--color-accent);color:var(--acc-ink)">{{ t.save }}</button>
 </div>
 </div>
-<div style="padding:12px 16px 16px;border-bottom:2px solid var(--color-divider)">
+<div style="margin:12px 16px 8px;padding:12px 14px;border-radius:18px;background:var(--color-surface)">
 <label class="btn btn-secondary" style="width:100%;height:48px;justify-content:flex-start;gap:8px;cursor:pointer;box-sizing:border-box"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12"></path><path d="m17 8-5-5-5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>{{ t.impBtn }}<input type="file" accept=".html,.htm,.txt,text/html,text/plain" sc-camel-on-change="{{ impFile }}" style="display:none"></label>
 <div style="font-size:12px;color:var(--muted);margin-top:6px">{{ t.impHint }}</div>
 </div>
@@ -2857,10 +2868,10 @@ const __ds_scope = {};
 <div style="padding:16px 16px 6px;display:flex;justify-content:space-between;align-items:baseline"><h6 style="margin:0">{{ t.secTap }}</h6><span style="font-size:11px;color:var(--muted)">{{ t.countIn }}</span></div>
 <div style="padding:0 16px 10px;font-size:12px;color:var(--muted);text-wrap:pretty">{{ pracNote }}</div>
 <sc-for list="{{ secRows }}" as="r" hint-placeholder-count="3">
-<div style="border-top:2px solid var(--color-divider);background:{{ r.bg }}">
+<div style="margin:8px 16px 0;border-radius:18px;background:{{ r.bg }};border:1.5px solid {{ r.cardBd }};overflow:hidden">
 <div style="display:flex;align-items:stretch">
 <button sc-camel-on-click="{{ r.togglePrac }}" aria-pressed="{{ r.prac }}" aria-label="{{ r.pracAria }}" style="all:unset;cursor:pointer;width:44px;flex:none;display:flex;align-items:center;justify-content:center">
-<span style="width:22px;height:22px;box-sizing:border-box;border:2px solid {{ r.pracBd }};background:{{ r.pracBg }};display:flex;align-items:center;justify-content:center;color:var(--acc-ink)"><sc-if value="{{ r.prac }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></span>
+<span style="width:22px;height:22px;box-sizing:border-box;border:1.5px solid {{ r.pracBd }};border-radius:7px;background:{{ r.pracBg }};display:flex;align-items:center;justify-content:center;color:var(--acc-ink)"><sc-if value="{{ r.prac }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"></path></svg></sc-if></span>
 </button>
 <button sc-camel-on-click="{{ r.select }}" aria-expanded="{{ r.selected }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:1;min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 16px 12px 0">
 <span style="font-family:var(--font-heading);font-weight:800;font-size:20px;width:26px;color:{{ r.numColor }}">{{ r.num }}</span>
@@ -2911,7 +2922,7 @@ const __ds_scope = {};
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
 <sc-for list="{{ r.steppers }}" as="st"><div style="display:flex;flex-direction:column;gap:6px;min-width:0">
 <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ st.label }}</span>
-<div style="display:flex;align-items:center;border:2px solid var(--color-divider)">
+<div style="display:flex;align-items:center;border:1.5px solid var(--color-divider);border-radius:999px;overflow:hidden;background:var(--color-bg)">
 <button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ st.dec }}" aria-label="{{ st.decAria }}" style="width:36px;height:40px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path></svg></button>
 <span style="flex:1;min-width:0;font-weight:800;font-size:16px;padding-left:2px;white-space:nowrap">{{ st.value }}</span>
 <button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ st.inc }}" aria-label="{{ st.incAria }}" style="width:36px;height:40px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
@@ -2924,9 +2935,9 @@ const __ds_scope = {};
 <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.beatsTap }}</span>
 <span style="font-size:11px;color:var(--muted)">{{ r.accLegend }}</span>
 </div>
-<div style="display:grid;grid-template-columns:{{ r.accCols }};gap:4px">
+<div style="display:grid;grid-template-columns:{{ r.accCols }};gap:6px">
 <sc-for list="{{ r.accCells }}" as="b">
-<button sc-camel-on-click="{{ b.cycle }}" aria-label="{{ b.aria }}" style="height:52px;border:2px solid {{ b.border }};background:{{ b.bg }};color:{{ b.fg }};border-radius:0;padding:6px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;cursor:pointer;font-family:var(--font-heading)">
+<button sc-camel-on-click="{{ b.cycle }}" aria-label="{{ b.aria }}" style="height:52px;border:1.5px solid {{ b.border }};background:{{ b.bg }};color:{{ b.fg }};border-radius:14px;padding:6px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;cursor:pointer;font-family:var(--font-heading)">
 <span style="font-weight:800;font-size:16px;line-height:1">{{ b.n }}</span>
 <span style="font-size:9px;letter-spacing:0.08em;text-transform:uppercase">{{ b.word }}</span>
 </button>
@@ -2945,7 +2956,7 @@ const __ds_scope = {};
 </div>
 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
 <sc-for list="{{ r.quickSigs }}" as="q">
-<button class="btn btn-secondary" sc-camel-on-click="{{ q.pick }}" style="padding:6px 10px;font-size:13px;min-height:40px;background:{{ q.bg }};color:{{ q.fg }};border-color:{{ q.bd }}">{{ q.label }}</button>
+<button class="btn btn-secondary" sc-camel-on-click="{{ q.pick }}" style="padding:6px 12px;font-size:13px;min-height:40px;border-radius:999px;background:{{ q.bg }};color:{{ q.fg }};border-color:{{ q.bd }}">{{ q.label }}</button>
 </sc-for>
 </div>
 </div>
@@ -2977,13 +2988,13 @@ const __ds_scope = {};
 <sc-for list="{{ bar.beats }}" as="bt"><div style="display:flex;gap:2px">
 <sc-for list="{{ bt.cells }}" as="u"><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
 <span style="height:12px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1;color:{{ u.cfg }}">{{ u.count }}</span>
-<select class="input" value="{{ u.sVal }}" sc-camel-on-change="{{ u.sChange }}" aria-label="{{ u.aria }}" style="width:100%;min-height:32px;height:32px;font-size:16px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.bg }};color:{{ u.fg }};border:1.5px solid {{ u.bd }};border-radius:0">
+<select class="input" value="{{ u.sVal }}" sc-camel-on-change="{{ u.sChange }}" aria-label="{{ u.aria }}" style="width:100%;min-height:32px;height:32px;font-size:16px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.bg }};color:{{ u.fg }};border:1.5px solid {{ u.bd }};border-radius:10px">
 <option value="">–</option>
 <option value="D">↓</option>
 <option value="U">↑</option>
 </select>
 <sc-if value="{{ pluckOn }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:2px">
-<select class="input" value="{{ u.pVal }}" sc-camel-on-change="{{ u.pChange }}" aria-label="{{ u.pAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.pBg }};color:{{ u.pFg }};border:1.5px solid {{ u.pBd }};border-radius:0">
+<select class="input" value="{{ u.pVal }}" sc-camel-on-change="{{ u.pChange }}" aria-label="{{ u.pAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.pBg }};color:{{ u.pFg }};border:1.5px solid {{ u.pBd }};border-radius:10px">
 <option value="">–</option>
 <option value="6">6E</option>
 <option value="5">5A</option>
@@ -2992,7 +3003,7 @@ const __ds_scope = {};
 <option value="2">2B</option>
 <option value="1">1e</option>
 </select>
-<select class="input" value="{{ u.qVal }}" sc-camel-on-change="{{ u.qChange }}" aria-label="{{ u.qAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.qBg }};color:{{ u.qFg }};border:1.5px solid {{ u.qBd }};border-radius:0">
+<select class="input" value="{{ u.qVal }}" sc-camel-on-change="{{ u.qChange }}" aria-label="{{ u.qAria }}" style="width:100%;min-height:32px;height:32px;font-size:14px;font-weight:800;padding:0 2px;text-align:center;background:{{ u.qBg }};color:{{ u.qFg }};border:1.5px solid {{ u.qBd }};border-radius:10px">
 <option value="">–</option>
 <option value="6">6E</option>
 <option value="5">5A</option>
@@ -3007,17 +3018,16 @@ const __ds_scope = {};
 </div>
 </div></sc-for>
 <span style="font-size:12px;color:var(--muted)">{{ t.boxHint }}</span>
-<sc-if value="{{ pluckOn }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--muted)">{{ t.pluckHint }}</span></sc-if>
 <sc-if value="{{ lyricsOn }}">
 <div class="field" style="margin:0">
 <label>{{ t.lyrics }}</label>
-<textarea class="input" value="{{ r.lyrics }}" sc-camel-on-change="{{ r.onLyrics }}" placeholder="{{ t.lyricsPh }}" rows="5" spellcheck="false" style="min-height:120px;font-size:16px;line-height:1.5;resize:vertical;font-family:var(--font-body);padding-top:10px;padding-bottom:10px"></textarea>
+<textarea class="input lyr-edit" value="{{ r.lyrics }}" sc-camel-on-change="{{ r.onLyrics }}" placeholder="{{ t.lyricsPh }}" rows="5" spellcheck="false" style="min-height:120px;font-size:16px;line-height:1.5;resize:vertical;font-family:var(--font-body);padding-top:10px;padding-bottom:10px"></textarea>
 <div style="font-size:12px;color:var(--muted);margin-top:6px">{{ t.lyricsHint }}</div>
 <sc-if value="{{ r.canConvert }}"><button class="btn btn-secondary" sc-camel-on-click="{{ r.convert }}" style="margin-top:8px;min-height:44px;justify-content:flex-start;text-align:left;font-size:14px;width:100%">{{ t.convertLyr }}</button></sc-if>
 </div>
 <div style="display:flex;align-items:center;gap:12px">
 <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-right:auto">{{ t.barsPerLine }}</span>
-<div style="display:flex;align-items:center;border:2px solid var(--color-divider);width:160px">
+<div style="display:flex;align-items:center;border:1.5px solid var(--color-divider);border-radius:999px;overflow:hidden;background:var(--color-bg);width:168px">
 <button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ r.bplDec }}" aria-label="Fewer bars per line" style="width:36px;height:40px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path></svg></button>
 <span style="flex:1;min-width:0;font-weight:800;font-size:16px;padding-left:2px;white-space:nowrap">{{ r.bplVal }}</span>
 <button class="btn btn-ghost btn-icon" sc-camel-on-click="{{ r.bplInc }}" aria-label="More bars per line" style="width:36px;height:40px;border-radius:0;flex:none"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
@@ -3025,14 +3035,14 @@ const __ds_scope = {};
 </div>
 <sc-if value="{{ r.lyrNote }}"><span style="font-size:12px;color:var(--muted)">{{ r.lyrNote }}</span></sc-if>
 </sc-if>
-<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px">
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
 <sc-for list="{{ r.actions }}" as="ac"><button class="btn btn-secondary" sc-camel-on-click="{{ ac.fn }}" disabled="{{ ac.disabled }}" style="padding:8px 8px;font-size:13px;justify-content:flex-start;min-height:40px">{{ ac.label }}</button></sc-for>
 </div>
 </div>
 </sc-if>
 </div>
 </sc-for>
-<div style="border-top:2px solid var(--color-divider);padding:12px 16px 20px">
+<div style="padding:12px 16px 24px">
 <button class="btn btn-secondary" sc-camel-on-click="{{ addSection }}" style="width:100%;height:48px;justify-content:flex-start;gap:8px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>{{ t.addSection }}</button>
 </div>
 </div>
@@ -3045,21 +3055,21 @@ const __ds_scope = {};
 <span style="font-size:13px;font-weight:600;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:auto">{{ songName }}</span>
 <span style="font-size:13px;font-weight:800;white-space:nowrap">{{ songBpm }} BPM</span>
 <span style="font-size:13px;color:var(--muted);white-space:nowrap">{{ loopNote }}</span>
-<sc-if value="{{ showLyr }}"><div style="display:flex;gap:2px;margin-left:4px;align-self:center"><button class="btn btn-secondary" sc-camel-on-click="{{ lyrDown }}" aria-label="Smaller lyrics" style="width:44px;height:40px;padding:0;justify-content:center;font-size:13px">A−</button><button class="btn btn-secondary" sc-camel-on-click="{{ lyrUp }}" aria-label="Bigger lyrics" style="width:44px;height:40px;padding:0;justify-content:center;font-size:17px">A+</button></div></sc-if>
+<sc-if value="{{ showLyr }}"><div style="display:flex;gap:6px;margin-left:4px;align-self:center"><button class="btn btn-secondary" sc-camel-on-click="{{ lyrDown }}" aria-label="Smaller lyrics" style="width:44px;height:40px;padding:0;justify-content:center;font-size:13px;border-radius:999px">A−</button><button class="btn btn-secondary" sc-camel-on-click="{{ lyrUp }}" aria-label="Bigger lyrics" style="width:44px;height:40px;padding:0;justify-content:center;font-size:17px;border-radius:999px">A+</button></div></sc-if>
 </div>
 <div style="padding:6px 16px 0;display:flex;justify-content:space-between;align-items:baseline;gap:12px">
 <span style="font-weight:800;font-size:28px;line-height:1.1;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ npTitle }}</span>
 <span style="font-weight:800;font-size:16px;color:var(--acc-text);white-space:nowrap">{{ npBar }}</span>
 </div>
-<div style="height:6px;background:var(--color-divider);margin:10px 16px 0;flex:none"><div style="height:100%;width:{{ npProgress }};background:var(--color-accent)"></div></div>
+<div style="height:8px;background:var(--color-divider);margin:12px 16px 0;border-radius:999px;overflow:hidden;flex:none"><div style="height:100%;width:{{ npProgress }};background:var(--color-accent);border-radius:999px"></div></div>
 <div style="padding:14px 16px 4px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end">
 <div style="min-width:0"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.chordLbl }}</div><div style="font-family:var(--font-heading);font-weight:800;font-size:{{ chordSize }};line-height:1;letter-spacing:-0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:4px">{{ curChord }}</div><sc-if value="{{ curReal }}"><div style="font-size:14px;font-weight:700;color:var(--muted);margin-top:6px">{{ curReal }}</div></sc-if></div>
 <div style="display:flex;flex-direction:column;align-items:flex-start;min-width:84px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.nextLbl }}</div><div style="font-weight:800;font-size:30px;line-height:1;color:var(--acc-text);padding-top:4px;white-space:nowrap">{{ nextChord }}</div><div style="font-size:12px;color:var(--muted);margin-top:4px;white-space:nowrap">{{ nextIn }}</div></div>
 </div>
 <sc-if value="{{ showStrum }}" hint-placeholder-val="{{ true }}">
-<div style="display:grid;grid-template-columns:{{ npCols }};gap:4px;padding:10px 16px 0">
-<sc-for list="{{ npBeats }}" as="b" hint-placeholder-count="4"><div style="display:flex;gap:2px">
-<sc-for list="{{ b.cells }}" as="u"><span style="flex:1;min-width:0;height:{{ npCellH }};border:2px solid {{ u.bd }};background:{{ u.bg }};color:{{ u.fg }};display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 0;box-sizing:border-box;font-family:var(--font-heading)"><span style="font-size:13px;font-weight:600;line-height:1;color:{{ u.cfg }}">{{ u.count }}</span><span style="font-size:{{ npGlyph }};font-weight:800;line-height:1">{{ u.glyph }}</span><sc-if value="{{ u.showP }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:800;line-height:1">{{ u.pMark }}</span></sc-if></span></sc-for>
+<div style="display:grid;grid-template-columns:{{ npCols }};gap:6px;padding:12px 16px 0">
+<sc-for list="{{ npBeats }}" as="b" hint-placeholder-count="4"><div style="display:flex;gap:4px">
+<sc-for list="{{ b.cells }}" as="u"><span style="flex:1;min-width:0;height:{{ npCellH }};border:1.5px solid {{ u.bd }};border-radius:12px;background:{{ u.bg }};color:{{ u.fg }};display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 0;box-sizing:border-box;font-family:var(--font-heading)"><span style="font-size:13px;font-weight:600;line-height:1;color:{{ u.cfg }}">{{ u.count }}</span><span style="font-size:{{ npGlyph }};font-weight:800;line-height:1">{{ u.glyph }}</span><sc-if value="{{ u.showP }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;font-weight:800;line-height:1">{{ u.pMark }}</span></sc-if></span></sc-for>
 </div></sc-for>
 </div>
 </sc-if>
@@ -3068,13 +3078,13 @@ const __ds_scope = {};
 <div style="flex:{{ playLyrFlex }};min-height:0;min-width:0;display:flex;flex-direction:column;border-top:{{ fullRightBd }}">
 <sc-if value="{{ showLyr }}" hint-placeholder-val="{{ false }}">
 <div style="position:relative;flex:1;min-height:0">
-<button sc-camel-on-click="{{ toggleLyrFull }}" aria-pressed="{{ lyrFull }}" aria-label="{{ t.lyrFull }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:absolute;top:6px;right:8px;z-index:2;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--color-bg);border:2px solid var(--color-divider)"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M21 8V5a2 2 0 0 0-2-2h-3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path><path d="M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
+<button sc-camel-on-click="{{ toggleLyrFull }}" aria-pressed="{{ lyrFull }}" aria-label="{{ t.lyrFull }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:absolute;top:8px;right:10px;z-index:2;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb, var(--color-bg) 86%, transparent);border:1.5px solid var(--color-divider);border-radius:50%"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M21 8V5a2 2 0 0 0-2-2h-3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path><path d="M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
 <div ref="{{ lyrRef }}" style="position:relative;height:100%;min-height:0;overflow-y:auto;padding:4px 48px 48px 16px">
 <sc-for list="{{ lyrBlocks }}" as="blk">
 <div style="padding:14px 0 6px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:{{ blk.fg }}">{{ blk.name }}</div>
 <sc-for list="{{ blk.lines }}" as="ln">
-<div data-active="{{ ln.act }}" data-k="{{ ln.k }}" style="display:flex;flex-wrap:wrap;align-items:flex-end;padding:8px 10px;margin:0 -10px;background:{{ ln.bg }};opacity:{{ ln.op }};transition:background 150ms, opacity 150ms">
-<sc-for list="{{ ln.segs }}" as="sg"><span style="display:inline-flex;flex-direction:column;white-space:pre"><span style="font-weight:800;font-size:{{ lyrChordSize }};line-height:1.2;min-height:{{ ln.chH }};padding-right:{{ sg.pr }};color:{{ sg.cColor }}">{{ sg.chord }}<span style="font-size:11px;font-weight:700;color:{{ sg.rColor }};padding-left:3px">{{ sg.real }}</span></span><span style="font-size:{{ lyrSize }};line-height:1.3;font-weight:{{ sg.weight }}">{{ sg.text }}</span></span></sc-for>
+<div data-active="{{ ln.act }}" data-k="{{ ln.k }}" style="display:flex;flex-wrap:wrap;align-items:flex-end;padding:8px 10px;margin:2px -10px;background:{{ ln.bg }};opacity:{{ ln.op }};border-radius:14px;transition:background 150ms, opacity 150ms">
+<sc-for list="{{ ln.segs }}" as="sg"><span style="display:inline-flex;flex-direction:column;align-items:flex-start;white-space:pre"><span style="display:inline-flex;align-items:baseline;min-height:{{ ln.chH }};padding-right:{{ sg.pr }}"><span style="font-weight:800;font-size:{{ lyrChordSize }};line-height:1.2;color:{{ sg.cColor }};background:{{ sg.cBg }};padding:{{ sg.cPad }}">{{ sg.chord }}</span><span style="font-size:11px;font-weight:700;color:{{ sg.rColor }};padding-left:3px">{{ sg.real }}</span></span><span style="font-size:{{ lyrSize }};line-height:1.3;font-weight:{{ sg.weight }}">{{ sg.text }}</span></span></sc-for>
 </div>
 </sc-for>
 </sc-for>
@@ -3084,30 +3094,31 @@ const __ds_scope = {};
 <sc-if value="{{ showChart }}" hint-placeholder-val="{{ false }}">
 <div style="flex:1;min-height:0;overflow-y:auto;padding:14px 16px 24px">
 <div style="font-weight:800;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">{{ chartTitle }}</div>
-<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px">
-<sc-for list="{{ playChart }}" as="cb"><div style="border:2px solid {{ cb.bd }};background:{{ cb.bg }};color:{{ cb.fg }};padding:8px 10px;min-height:72px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box;min-width:0"><span style="font-size:11px;color:{{ cb.nfg }}">{{ cb.n }}</span><span style="font-weight:800;font-size:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ cb.text }}</span><span style="font-size:12px;font-weight:700;color:{{ cb.nfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ cb.real }}</span></div></sc-for>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<sc-for list="{{ playChart }}" as="cb"><div style="border:1.5px solid {{ cb.bd }};border-radius:16px;background:{{ cb.bg }};color:{{ cb.fg }};padding:10px;min-height:72px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box;min-width:0"><span style="font-size:11px;color:{{ cb.nfg }}">{{ cb.n }}</span><span style="font-weight:800;font-size:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ cb.text }}</span><span style="font-size:12px;font-weight:700;color:{{ cb.nfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ cb.real }}</span></div></sc-for>
 </div>
 </div>
 </sc-if>
 </div>
 </div>
 </sc-if>
-<div style="flex:none;padding:0 16px 4px;display:grid;grid-template-columns:{{ songBarCols }};gap:4px">
-<button sc-camel-on-click="{{ toggleGuitar }}" aria-pressed="{{ guitarOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:48px;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 4px;font-weight:800;font-size:13px;background:{{ gBg }};color:{{ gFg }};border:2px solid {{ gBd }}"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>{{ t.guitarShort }}</button>
-<button sc-camel-on-click="{{ togglePluck }}" aria-pressed="{{ pluckOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:48px;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 4px;font-weight:800;font-size:13px;background:{{ pBg }};color:{{ pFg }};border:2px solid {{ pBd }}"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M3 12h18"></path><path d="M3 18h18"></path><circle cx="15" cy="12" r="2.4" fill="currentColor" stroke="none"></circle></svg>{{ t.pluck }}</button>
+<div style="flex:none;padding:8px 16px 4px;display:grid;grid-template-columns:{{ songBarCols }};gap:8px">
+<button sc-camel-on-click="{{ toggleGuitar }}" aria-pressed="{{ guitarOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ gBg }};color:{{ gFg }};border:1.5px solid {{ gBd }};border-radius:18px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>{{ t.guitarShort }}</button>
+<button sc-camel-on-click="{{ togglePluck }}" aria-pressed="{{ pluckOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ pBg }};color:{{ pFg }};border:1.5px solid {{ pBd }};border-radius:18px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M3 12h18"></path><path d="M3 18h18"></path><circle cx="15" cy="12" r="2.4" fill="currentColor" stroke="none"></circle></svg>{{ t.pluck }}</button>
 <sc-if value="{{ songOn }}" hint-placeholder-val="{{ false }}">
-<button sc-camel-on-click="{{ togglePause }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:48px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 4px;font-weight:800;font-size:14px;background:{{ pauseBg }};color:{{ pauseFg }};border:2px solid {{ pauseBd }}">
+<button sc-camel-on-click="{{ togglePause }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ pauseBg }};color:{{ pauseFg }};border:1.5px solid {{ pauseBd }};border-radius:18px">
 <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></sc-if>
 <sc-if value="{{ pauseIcon }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" sc-camel-view-box="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="5" height="16"></rect><rect x="14" y="4" width="5" height="16"></rect></svg></sc-if>
 {{ pauseLabel }}</button>
 </sc-if>
-<button class="btn btn-primary" sc-camel-on-click="{{ toggleSong }}" style="min-width:0;height:48px;justify-content:center;font-size:14px;padding:0 6px;gap:6px;background:{{ songPlayBg }};color:{{ songPlayFg }};border-color:{{ songPlayBg }}">
+<button sc-camel-on-click="{{ toggleSong }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ songPlayBg }};color:{{ songPlayFg }};border:1.5px solid {{ songPlayBg }};border-radius:18px">
 <sc-if value="{{ songOn }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14"></rect></svg></sc-if>
 <sc-if value="{{ songOff }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></sc-if>
 {{ songPlayShort }}</button>
-<button class="btn btn-secondary" sc-camel-on-click="{{ toggleSongLoop }}" aria-pressed="{{ songLoop }}" style="min-width:0;height:48px;padding:0 6px;gap:6px;justify-content:center;font-size:14px;background:{{ loopBg }};color:{{ loopFg }};border-color:{{ loopBd }}"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>{{ t.loop }}</button>
+<button sc-camel-on-click="{{ toggleSongLoop }}" aria-pressed="{{ songLoop }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ loopBg }};color:{{ loopFg }};border:1.5px solid {{ loopBd }};border-radius:18px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>{{ t.loop }}</button>
 </div>
-<div style="padding:0 16px 10px;font-size:11px;color:var(--muted)">{{ t.guitarCredit }}<sc-if value="{{ pluckOn }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;margin-top:4px">{{ t.pluckHint }}</div></sc-if></div>
+<div style="padding:0 16px 10px;font-size:11px;color:var(--muted)">{{ t.guitarCredit }}</div>
+</div>
 </sc-if>
 
 <sc-if value="{{ onLibrary }}" hint-placeholder-val="{{ false }}">
@@ -3297,7 +3308,7 @@ const __ds_scope = {};
 <sc-for list="{{ col.items }}" as="it">
 <sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="padding:12px 0 4px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:{{ it.fg }}">{{ it.name }}</div></sc-if>
 <sc-if value="{{ it.line }}" hint-placeholder-val="{{ false }}"><div data-active="{{ it.act }}" data-k="{{ it.k }}" style="display:flex;flex-wrap:wrap;align-items:flex-end;padding:6px 0;background:{{ it.bg }};opacity:{{ it.op }}">
-<sc-for list="{{ it.segs }}" as="sg"><span style="display:inline-flex;flex-direction:column;white-space:pre"><span style="font-weight:800;font-size:{{ lyrChordSize }};line-height:1.2;min-height:{{ it.chH }};padding-right:{{ sg.pr }};color:{{ sg.cColor }}">{{ sg.chord }}<span style="font-size:11px;font-weight:700;color:{{ sg.rColor }};padding-left:3px">{{ sg.real }}</span></span><span style="font-size:{{ lyrSize }};line-height:1.3;font-weight:{{ sg.weight }}">{{ sg.text }}</span></span></sc-for>
+<sc-for list="{{ it.segs }}" as="sg"><span style="display:inline-flex;flex-direction:column;align-items:flex-start;white-space:pre"><span style="display:inline-flex;align-items:baseline;min-height:{{ it.chH }};padding-right:{{ sg.pr }}"><span style="font-weight:800;font-size:{{ lyrChordSize }};line-height:1.2;color:{{ sg.cColor }};background:{{ sg.cBg }};padding:{{ sg.cPad }}">{{ sg.chord }}</span><span style="font-size:11px;font-weight:700;color:{{ sg.rColor }};padding-left:3px">{{ sg.real }}</span></span><span style="font-size:{{ lyrSize }};line-height:1.3;font-weight:{{ sg.weight }}">{{ sg.text }}</span></span></sc-for>
 </div></sc-if>
 </sc-for>
 </div></sc-for>
@@ -3580,6 +3591,41 @@ const inferKey = song => {
 };
 const FIFTHS = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
 const KEY_LIST = FIFTHS.map(pc => keyName({ pc, minor: false })).concat(FIFTHS.map(pc => keyName({ pc: (pc + 9) % 12, minor: true })));
+const degreesOf = ki => {
+  const flats = useFlats(ki), n = (semi, q) => noteSpell(ki.pc + semi, flats) + q;
+  const rows = ki.minor
+    ? [[1, n(0, 'm')], [2, n(2, 'dim')], [3, n(3, '')], [4, n(5, 'm')], [5, n(7, 'm')], [6, n(8, '')], [7, n(10, '')]]
+    : [[1, n(0, '')], [2, n(2, 'm')], [3, n(4, 'm')], [4, n(5, '')], [5, n(7, '')], [6, n(9, 'm')], [7, n(11, 'dim')]];
+  return rows.map(([deg, v]) => ({ deg, v }));
+};
+const triadKind = tok => {
+  const m = CH_RE.exec(normChord(tok));
+  if (!m) return null;
+  const q = m[2] || '';
+  const kind = /dim|°/.test(q) || /m7b5/.test(q) ? 'dim' : isMinQ(q) ? 'min' : 'maj';
+  return { pc: pcOf(m[1]), kind };
+};
+const firstTriads = song => {
+  const sec = (song.sections || [])[0];
+  if (!sec) return [];
+  const out = [];
+  (sec.chords || '').split(/[\s|]+/).forEach(t => { const k = triadKind(t); if (k) out.push(k); });
+  return out;
+};
+const matchKeys = song => {
+  const cs = firstTriads(song);
+  if (!cs.length) return [];
+  let best = 0;
+  const rows = KEY_LIST.map(name => {
+    const ki = keyInfo(name), set = {};
+    degreesOf(ki).forEach(d => { const t = triadKind(d.v); if (t) set[t.pc + ':' + t.kind] = 1; });
+    let sc = 0;
+    cs.forEach(c => { if (set[c.pc + ':' + c.kind]) sc++; });
+    if (sc > best) best = sc;
+    return { name, sc };
+  });
+  return best > 0 ? rows.filter(r => r.sc === best).map(r => r.name) : [];
+};
 const noteSpell = (pc, flats) => (flats ? NOTES_F : NOTES_S)[((pc % 12) + 12) % 12];
 const familyOf = ki => {
   const k = ki || { pc: 0, minor: false }, flats = useFlats(k);
@@ -3594,9 +3640,57 @@ const chordBarCount = sec => Math.max(1, parseChords(sec.chords).length);
 const sectionBaseBars = sec => Math.max(1, parseChords(sec.chords).length || sec.patternBars || 1);
 const sectionPlayBars = sec => sectionBaseBars(sec) * Math.max(1, sec.repeat || 1);
 const lyricStep = (sec, nLines) => {
-  const bpl = Math.max(1, sec.bpl || 2), rep = Math.max(1, sec.repeat || 1);
-  if (nLines > 1 && nLines === rep) return sectionBaseBars(sec);
-  return bpl;
+  const bpl = Math.max(1, sec.bpl || 2), rep = Math.max(1, sec.repeat || 1), base = sectionBaseBars(sec);
+  if (nLines > 1 && nLines === rep) return base;
+  const fit = nLines > 0 ? Math.max(1, Math.floor(base / nLines)) : bpl;
+  return Math.max(bpl, fit);
+};
+const lyricCursor = (sec, lines, bar, frac) => {
+  const n = lines.length;
+  if (!n) return { al: -1, hot: -1 };
+  const beatFrac = Math.min(0.999, Math.max(0, +frac || 0));
+  const base = sectionBaseBars(sec), rep = Math.max(1, sec.repeat || 1);
+  const chordLines = [];
+  lines.forEach((ln, li) => {
+    const segs = [];
+    parseLyric(ln).forEach((seg, si) => { if (seg.chord) segs.push(si); });
+    if (segs.length) chordLines.push({ li, segs });
+  });
+  const hotSeg = (segs, at, slots) => {
+    const nSeg = segs.length;
+    if (!nSeg) return -1;
+    const span = Math.max(1, slots);
+    const t = Math.min(span - 1e-6, Math.max(0, at));
+    if (nSeg <= span) return segs[Math.min(nSeg - 1, Math.floor(t))];
+    const head = span - 1;
+    if (t < head) return segs[Math.floor(t)];
+    const extra = nSeg - head;
+    const into = t - head;
+    return segs[Math.min(nSeg - 1, head + Math.floor(into * extra))];
+  };
+  if (n > 1 && n === rep && chordLines.length === n) {
+    const slot = Math.min(n - 1, Math.floor(bar / base)), row = chordLines[slot];
+    return { al: row.li, hot: hotSeg(row.segs, (bar % base) + beatFrac, base) };
+  }
+  if (!chordLines.length) {
+    const step = Math.max(1, sec.bpl || 2), span = n * step;
+    const rel = span > base ? bar : (bar % base);
+    const pos = ((rel % span) + span) % span;
+    return { al: Math.floor(pos / step), hot: -1 };
+  }
+  const step = lyricStep(sec, chordLines.length), span = chordLines.length * step;
+  const pass = Math.floor(bar / base), barIn = bar % base;
+  const rel = span > base ? (pass % Math.max(1, Math.floor(span / base))) * base + barIn : barIn;
+  const pos = Math.min(span - 1e-6, rel + beatFrac);
+  const lineSlot = Math.min(chordLines.length - 1, Math.floor(pos / step));
+  const row = chordLines[lineSlot];
+  return { al: row.li, hot: hotSeg(row.segs, pos - lineSlot * step, step) };
+};
+const lyricIdent = sec => {
+  const name = (sec.name || '').trim().replace(/\s+/g, ' ').toLowerCase();
+  const lyrics = (sec.lyrics || '').replace(/\r\n/g, '\n').trim();
+  const chords = (sec.chords || '').replace(/\s+/g, ' ').trim();
+  return name && lyrics ? name + '\n' + lyrics + '\n' + chords : '';
 };
 const chordsFromBars = bars => bars.map(t => { const s = (t || []).filter(x => x && x !== '.'); return s.length ? s.join(' ') : '.'; }).join(' | ');
 const EASY_MAJ = [7, 0, 2, 9, 4], EASY_MIN = [4, 9, 2];
@@ -3781,7 +3875,7 @@ Object.assign(ZH, { 'Dom / Da': '咚 / 哒', 'Kick / Hat': '底鼓 / 镲', 'Cowb
   'Chords': '和弦', 'Put | between bars. Two chords in one bar share it evenly. Use . to hold a beat: D . . Em': '小节之间用 | 分隔。一个小节写两个和弦会平分拍子。用 . 延长一拍：D . . Em',
   'Lyrics': '歌词', '[G]Here comes the [D]first line\n[Em]Chords go in [C]brackets': '[G]这里是 [D]第一句\n[Em]和弦写在 [C]方括号里', 'Put the chord in [brackets] just before the word where it changes.': '把和弦写在 [方括号] 里，放在换和弦的那个字前面。',
   'Bars per line': '每行小节数', 'Write lyrics in each section and show them while the song plays': '在每个段落写歌词，播放时显示', 'Chord': '和弦', 'Next': '下一个' });
-Object.assign(TK, { chords: 'Chords', chordsPh: 'G | D Em | C | D', chordsHint: 'Four bars on a line. The top box is the chord. The bottom box is a second chord in the same bar.', lyrics: 'Lyrics', lyricsPh: '[G]Here comes the [D]first line\n[Em]Chords go in [C]brackets', lyricsHint: 'Put the chord in [brackets] on the word where it changes. Bars per line is how long one lyric line lasts. The highlight moves down, including on each repeat.', barsPerLine: 'Bars per line', lyricsSwitch: 'Lyrics', lyricsSwitchDesc: 'Write lyrics in each section and show them while the song plays', chordLbl: 'Chord', nextLbl: 'Next', pairsHead: 'Accent / beat pairs', pairsDesc: 'Easy to tell apart while you play', origKey: 'Original key', chooseKey: 'Choose key', chord1: 'Chord', chord2: '2nd chord', chordTwoShort: '4 per line', addBar: 'Add bar', removeBar: 'Remove bar', repeatHint: 'Repeat plays this whole chord list that many times. It does not add chord boxes. A different strum pattern needs its own section.' });
+Object.assign(TK, { chords: 'Chords', chordsPh: 'G | D Em | C | D', chordsHint: 'Set the chords in the first section. The closest keys are listed above. After you pick one, each chord list is degrees 1 to 7 of that key.', lyrics: 'Lyrics', lyricsPh: '[G]Here comes the [D]first line\n[Em]Chords go in [C]brackets', lyricsHint: 'Put the chord in [brackets] on the word where it changes. Bars per line is how long one lyric line lasts. The highlight moves down, including on each repeat.', barsPerLine: 'Bars per line', lyricsSwitch: 'Lyrics', lyricsSwitchDesc: 'Write lyrics in each section and show them while the song plays', chordLbl: 'Chord', nextLbl: 'Next', pairsHead: 'Accent / beat pairs', pairsDesc: 'Easy to tell apart while you play', origKey: 'Original key', chooseKey: 'Choose key', chord1: 'Chord', chord2: '2nd chord', chordTwoShort: '4 per line', addBar: 'Add bar', removeBar: 'Remove bar', repeatHint: 'Repeat plays this whole chord list that many times. It does not add chord boxes. A different strum pattern needs its own section.' });
 const COLORS = [{ v: 'Teal', h: 192, k: 0.7 }, { v: 'Sage', h: 150, k: 0.5 }, { v: 'Ocean', h: 245, k: 0.65 }, { v: 'Lavender', h: 295, k: 0.55 }, { v: 'Sand', h: 70, k: 0.6 }, { v: 'Rose', h: 10, k: 0.55 }, { v: 'Classic', h: null }];
 const OLD_COLOR = { Red: 'Classic', Blue: 'Ocean', Green: 'Sage', Orange: 'Sand', Purple: 'Lavender' };
 const RAMP = { 100: [0.96, 0.03], 200: [0.9, 0.07], 300: [0.82, 0.12], 400: [0.72, 0.16], 500: [0.62, 0.19], 600: [0.54, 0.18], 700: [0.46, 0.15], 800: [0.36, 0.11], 900: [0.26, 0.07] };
@@ -3790,7 +3884,7 @@ const rampVars = (h, k) => Object.fromEntries(Object.entries(RAMP).map(([n, [l, 
 const neutVars = h => Object.fromEntries(Object.entries(NEUT).map(([n, l]) => ['--color-neutral-' + n, `oklch(${l} 0.012 ${h})`]));
 Object.assign(ZH, { 'Theme': '主题', 'Colours for the whole app. Dark mode is a separate switch above.': '整个应用的配色。深色模式在上方单独开关。', 'Teal': '青绿', 'Sage': '鼠尾草', 'Ocean': '海蓝', 'Lavender': '薰衣草', 'Sand': '沙金', 'Rose': '玫瑰', 'Classic': '经典红' });
 Object.assign(TK, { colour: 'Theme', colourDesc: 'Colours for the whole app. Dark mode is a separate switch above.' });
-Object.assign(ZH, { 'Choose the original key. The chord list follows that key.': '先选原调，和弦列表会跟着这个调走。', 'Pick the original key first. Each bar can be one chord, or two chords that split the bar.': '先选原调。每个小节可以选一个和弦，或两个和弦平分这一小节。', 'Original key': '原调', 'Choose key': '选择调', 'Chord': '和弦', '2nd chord': '第二个和弦', '1 or 2 per bar': '每小节 1 或 2 个', 'Add bar': '加小节', 'Remove bar': '去掉小节', 'Key & capo': '调与变调夹', 'Transpose': '移调', 'Capo': '变调夹', 'Reset': '重置', 'Use': '使用', 'Unsaved': '未保存', 'Save key change': '保存调的更改', 'Import from iReal Pro': '从 iReal Pro 导入', 'Open a playlist or song exported from iReal Pro as HTML.': '打开从 iReal Pro 导出的 HTML 歌单或歌曲。', 'Import songs': '导入歌曲', 'Already in Library': '曲库中已有', 'Select all': '全选', 'Select none': '全不选', 'No songs found in this file': '这个文件里没有找到歌曲', 'No capo needed': '不需要变调夹', 'Add chords to detect the key': '先选择原调' });
+Object.assign(ZH, { 'Choose the original key. The chord list follows that key.': '先选原调，和弦列表会跟着这个调走。', 'Pick the original key first. Each bar can be one chord, or two chords that split the bar.': '先选原调。每个小节可以选一个和弦，或两个和弦平分这一小节。', 'Original key': '原调', 'Choose key': '选择调', 'Chord': '和弦', '2nd chord': '第二个和弦', '1 or 2 per bar': '每小节 1 或 2 个', 'Add bar': '加小节', 'Remove bar': '去掉小节', 'Key & capo': '调与变调夹', 'Transpose': '移调', 'Capo': '变调夹', 'Reset': '重置', 'Use': '使用', 'Unsaved': '未保存', 'Save key change': '保存调的更改', 'Import from iReal Pro': '从 iReal Pro 导入', 'Open a playlist or song exported from iReal Pro as HTML.': '打开从 iReal Pro 导出的 HTML 歌单或歌曲。', 'Import songs': '导入歌曲', 'Already in Library': '曲库中已有', 'Select all': '全选', 'Select none': '全不选', 'No songs found in this file': '这个文件里没有找到歌曲', 'No capo needed': '不需要变调夹', 'Add chords to detect the key': '先选择原调', 'Add chords in the first section. The closest keys show up here.': '先在第一段选好和弦，这里会列出最接近的原调。', 'Set the chords in the first section. The closest keys are listed above. After you pick one, each chord list is degrees 1 to 7 of that key.': '先在第一段选和弦。上面会列出最接近的原调。选定后，和弦列表变成这个调的 1 到 7 级。' });
 Object.assign(ZH, { 'Four bars on a line. The top box is the chord. The bottom box is a second chord in the same bar.': '一行四个小节。上面是和弦，下面是同一小节的第二个和弦。', 'Repeat plays this whole chord list that many times. It does not add chord boxes. A different strum pattern needs its own section.': '重复是把这一串和弦整段再弹几次，不会多出和弦格。扫弦节奏不同就另开一个段落。', 'Put the chord in [brackets] on the word where it changes. Bars per line is how long one lyric line lasts. The highlight moves down, including on each repeat.': '和弦写在 [括号] 里，放在换和弦的词前面。每行小节数是这一行唱几小节。到了就换下一行，重复时也会继续往下走。', '4 per line': '一行 4 个' });
 Object.assign(TK, { keyTitle: 'Key & capo', unsaved: 'Unsaved', use: 'Use', reset: 'Reset', saveKeyTitle: 'Save key change', transpose: 'Transpose', capo: 'Capo', impBtn: 'Import from iReal Pro', impHint: 'Open a playlist or song exported from iReal Pro as HTML.', impTitle: 'Import songs' });
 Object.assign(ZH, { 'Set list': '歌单', 'Tap the list button next to a song below to add it here.': '点下面歌曲旁的列表按钮，把歌曲加入歌单。', 'Clear set list': '清空歌单', 'Set list cleared': '歌单已清空', 'Search songs or key': '搜索歌曲或调', 'Recent': '最近', 'A–Z': '名称', 'Key': '调', 'No songs match': '没有符合的歌曲', 'Tempo trainer': '速度练习', 'Speed up a little every few bars': '每隔几小节自动加快一点', '+ BPM': '每次加', 'Every': '每隔', 'Up to': '加到', 'Target reached': '已到目标速度', 'Undo': '撤销', 'Time to back up': '该备份了', 'Later': '稍后', 'Convert chords above the lyrics into [G] style': '把歌词上方的和弦转换成 [G] 格式', 'Never backed up yet': '还没有备份过', 'End of set list': '歌单最后一首', 'Song finished': '歌曲结束' });
@@ -3816,9 +3910,9 @@ Object.assign(ZH, { 'First': '第一拍', 'first': '第一拍', '1': '1', 'The 1
   'Highest beep on the 1, high on accents, low on the beats': '第一拍最高音，重音高音，其他拍低音',
   'Big clap on the 1, clap on accents, tick on the beats': '第一拍是大声拍手，重音是拍手，其他拍是嗒' });
 Object.assign(TK, { sound3: 'The 1, an accent, and a normal beat each have their own sound.', drumCredit: 'Recorded drums in this list: FluidR3 GM, CC BY 3.0.' });
-Object.assign(ZH, { 'Play': '播放', 'Stop': '停止', 'Pause': '暂停', 'Resume': '继续', 'Full screen': '全屏', 'Exit lyrics': '退出', 'Turn this on before you play. The corner button on the lyrics uses the same switch.': '播放前就能打开。歌词右上角的按钮和这个开关是同步的。', 'Guitar': '吉他', 'Tick a section to practice it. Leave them all off to play the whole song.': '勾选段落来练习。全部不勾就是播放整首歌。', 'Practice: ': '练习：', 'Practice ': '练习 ', 'Stop practicing ': '取消练习 ' });
+Object.assign(ZH, { 'Play': '播放', 'Stop': '停止', 'Pause': '暂停', 'Resume': '继续', 'Full screen': '全屏', 'Exit lyrics': '退出', 'Cursor': '光标', 'Guitar': '吉他', 'Tick a section to practice it. Leave them all off to play the whole song.': '勾选段落来练习。全部不勾就是播放整首歌。', 'Practice: ': '练习：', 'Practice ': '练习 ', 'Stop practicing ': '取消练习 ' });
 Object.assign(TK, { play: 'Play', stop: 'Stop', guitarShort: 'Guitar', pracHint: 'Tick a section to practice it. Leave them all off to play the whole song.' });
-Object.assign(TK, { pluck: 'Pluck', strumSnd: 'Strum', lyrFull: 'Full screen', lyrExit: 'Exit lyrics', lyrFullSwitch: 'Full screen', lyrFullSwitchDesc: 'Turn this on before you play. The corner button on the lyrics uses the same switch.', pluckHint: 'Pluck · tap a box and pick a string, the same way you pick a chord. The top box is the first string. The one under it plays at the same time. 6E is thick, 1e is thin.' });
+Object.assign(TK, { pluck: 'Pluck', strumSnd: 'Strum', lyrFull: 'Full screen', lyrExit: 'Exit lyrics', lyrFullSwitch: 'Full screen', cursorSwitch: 'Cursor', pluckHint: 'Pluck · tap a box and pick a string, the same way you pick a chord. The top box is the first string. The one under it plays at the same time. 6E is thick, 1e is thin.' });
 Object.assign(ZH, { 'Pluck': '拨弦', 'Pluck · tap a box and pick a string, the same way you pick a chord. The top box is the first string. The one under it plays at the same time. 6E is thick, 1e is thin.': '拨弦 · 和选和弦一样，点开小列表选弦。上面是第一根，下面是同一拍一起响的第二根。6E 是粗弦，1e 是细弦。' });
 Object.assign(TK, { useBeatHint: 'Copies time, accents, subdivision, strum and pluck. The song tempo stays the same.' });
 Object.assign(ZH, { 'Copies time, accents, subdivision, strum and pluck. The song tempo stays the same.': '套用拍号、重音、细分、扫弦和拨弦。歌曲速度保持不变。' });
@@ -3852,7 +3946,7 @@ class Component extends DCLogic {
     this.state = {
       bpm: cur.bpm ?? 120, beats: cur.beats ?? 4, den: cur.den ?? 4, sub: cur.sub ?? 1, grid: cur.grid ?? cur.sub ?? 1,
       accents: cur.accents ?? ['one', 'normal', 'normal', 'normal'], strum: cur.strum ?? fitStrum(null, 1, cur.beats ?? 4, cur.grid ?? cur.sub ?? 1), pluckPat: Array.isArray(cur.pluck) ? cur.pluck : defaultPluck(cur.beats ?? 4, cur.grid ?? cur.sub ?? 1), pluckPat2: Array.isArray(cur.pluck2) ? cur.pluck2 : cleanPluck(null, (cur.beats ?? 4) * (cur.grid ?? cur.sub ?? 1)), presetId: cur.presetId ?? null,
-      playing: false, active: -1, dark: st.dark ?? false, songLoop: st.songLoop ?? false, guitar: st.guitar ?? false, pluck: st.pluck ?? false, strumSnd: st.strumSnd ?? false, color: OLD_COLOR[st.color] || st.color || 'Teal', lang: st.lang ?? ((navigator.language || '').toLowerCase().startsWith('zh') ? 'zh' : 'en'), sound: st.sound ?? 'Click', flashOn: st.flashOn ?? true, show: { ...ALL_ON, ...(st.show || {}) }, pulse: null, screen: (/\bshow=song\b/.test(location.search) ? 'song' : 'metronome'), songs: sg.songs, songId: sg.songId, secSel: (/\bshow=song\b/.test(location.search) ? 0 : -1), prac: {}, pracPlay: null, songPos: -1, mode: null, presets, dialog: false, draftName: '', toast: '', kd: null, imp: null, kSave: false, setlist: sg.setlist || [], sets: sg.sets, setId: sg.setId, bin: Array.isArray(sg.bin) ? sg.bin.filter(b => b && b.item && ['song', 'preset', 'set'].includes(b.type) && Date.now() - (b.at || 0) < 30 * 864e5) : [], binOpen: false, libOpen: { set: st.libOpen?.set !== false, song: st.libOpen?.song !== false, beat: st.libOpen?.beat !== false }, trainer: { on: false, step: 2, every: 4, target: 140, ...(st.trainer || {}) }, lyrScale: st.lyrScale ?? 1, lyrFull: !!st.lyrFull, lastBackup: st.lastBackup ?? null, firstUse: st.firstUse, bkSnooze: st.bkSnooze ?? 0, libQ: '', libSort: 'recent', undo: null,
+      playing: false, active: -1, dark: st.dark ?? false, songLoop: st.songLoop ?? false, guitar: st.guitar ?? false, pluck: st.pluck ?? false, strumSnd: st.strumSnd ?? false, color: OLD_COLOR[st.color] || st.color || 'Teal', lang: st.lang ?? ((navigator.language || '').toLowerCase().startsWith('zh') ? 'zh' : 'en'), sound: st.sound ?? 'Click', flashOn: st.flashOn ?? true, show: { ...ALL_ON, ...(st.show || {}) }, pulse: null, screen: (/\bshow=song\b/.test(location.search) ? 'song' : 'metronome'), songs: sg.songs, songId: sg.songId, secSel: (/\bshow=song\b/.test(location.search) ? 0 : -1), prac: {}, pracPlay: null, songPos: -1, mode: null, presets, dialog: false, draftName: '', toast: '', kd: null, imp: null, kSave: false, setlist: sg.setlist || [], sets: sg.sets, setId: sg.setId, bin: Array.isArray(sg.bin) ? sg.bin.filter(b => b && b.item && ['song', 'preset', 'set'].includes(b.type) && Date.now() - (b.at || 0) < 30 * 864e5) : [], binOpen: false, libOpen: { set: st.libOpen?.set !== false, song: st.libOpen?.song !== false, beat: st.libOpen?.beat !== false }, trainer: { on: false, step: 2, every: 4, target: 140, ...(st.trainer || {}) }, lyrScale: st.lyrScale ?? 1, lyrFull: !!st.lyrFull, lyrCursor: st.lyrCursor !== false, lastBackup: st.lastBackup ?? null, firstUse: st.firstUse, bkSnooze: st.bkSnooze ?? 0, libQ: '', libSort: 'recent', undo: null,
     };
     this.taps = [];
     this.lyrRef = el => { this.lyrEl = el; };
@@ -3862,8 +3956,8 @@ class Component extends DCLogic {
   componentDidUpdate() {
     const s = this.state, prev = this._prevState || {};
     this._prevState = s;
-    if (['dark', 'sound', 'flashOn', 'show', 'lang', 'songLoop', 'guitar', 'pluck', 'strumSnd', 'color', 'trainer', 'lyrScale', 'lyrFull', 'lastBackup', 'bkSnooze', 'libOpen'].some(k => prev[k] !== s[k]))
-      lsSet(SET, JSON.stringify({ color: s.color, songLoop: s.songLoop, guitar: s.guitar, pluck: s.pluck, strumSnd: s.strumSnd, lang: s.lang, dark: s.dark, sound: s.sound, flashOn: s.flashOn, show: s.show, trainer: s.trainer, lyrScale: s.lyrScale, lyrFull: !!s.lyrFull, lastBackup: s.lastBackup, firstUse: s.firstUse, bkSnooze: s.bkSnooze, libOpen: s.libOpen, acc3: true }));
+    if (['dark', 'sound', 'flashOn', 'show', 'lang', 'songLoop', 'guitar', 'pluck', 'strumSnd', 'color', 'trainer', 'lyrScale', 'lyrFull', 'lyrCursor', 'lastBackup', 'bkSnooze', 'libOpen'].some(k => prev[k] !== s[k]))
+      lsSet(SET, JSON.stringify({ color: s.color, songLoop: s.songLoop, guitar: s.guitar, pluck: s.pluck, strumSnd: s.strumSnd, lang: s.lang, dark: s.dark, sound: s.sound, flashOn: s.flashOn, show: s.show, trainer: s.trainer, lyrScale: s.lyrScale, lyrFull: !!s.lyrFull, lyrCursor: s.lyrCursor !== false, lastBackup: s.lastBackup, firstUse: s.firstUse, bkSnooze: s.bkSnooze, libOpen: s.libOpen, acc3: true }));
     if (prev.songs !== s.songs || prev.songId !== s.songId || prev.setlist !== s.setlist || prev.sets !== s.sets || prev.setId !== s.setId || prev.bin !== s.bin) lsSet(SONGS, JSON.stringify({ songs: s.songs, songId: s.songId, sets: this.allSets(s), setId: s.setId, bin: s.bin }));
     if (prev.presets !== s.presets) lsSet(KEY, JSON.stringify(s.presets));
     if (['bpm', 'beats', 'den', 'sub', 'grid', 'accents', 'strum', 'pluckPat', 'pluckPat2', 'presetId'].some(k => prev[k] !== s[k]))
@@ -3873,6 +3967,76 @@ class Component extends DCLogic {
       if (k !== this._lyrK) { this._lyrK = k; if (a) this.lyrEl.scrollTo({ top: Math.max(0, a.offsetTop - this.lyrEl.clientHeight * 0.3), behavior: 'smooth' }); }
     } else this._lyrK = null;
     this.fitLyr();
+    if (this.placeLyrCaret) this.placeLyrCaret();
+  }
+  mountLyrCaret() {
+    if (this._lyrCaret) return;
+    const bar = document.createElement('div');
+    bar.className = 'lyr-caret-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.style.display = 'none';
+    document.body.appendChild(bar);
+    this._lyrCaret = bar;
+    const isLyr = el => el && el.tagName === 'TEXTAREA' && el.classList.contains('lyr-edit');
+    this._lyrFocus = e => { if (isLyr(e.target)) { this._lyrTa = e.target; this.placeLyrCaret(); } };
+    this._lyrBlur = e => { if (e.target === this._lyrTa) { this._lyrTa = null; bar.style.display = 'none'; } };
+    this._lyrPlaceEv = e => { if (isLyr(e.target)) { this._lyrTa = e.target; this.placeLyrCaret(); } };
+    this._lyrImeOn = e => { if (isLyr(e.target)) { e.target.classList.add('lyr-ime'); this.placeLyrCaret(); } };
+    this._lyrImeOff = e => { if (isLyr(e.target)) { e.target.classList.remove('lyr-ime'); this._lyrTa = e.target; this.placeLyrCaret(); } };
+    this._lyrSel = () => { const ta = document.activeElement; if (ta && ta.tagName === 'TEXTAREA' && ta.classList.contains('lyr-edit')) { this._lyrTa = ta; this.placeLyrCaret(); } };
+    document.addEventListener('focusin', this._lyrFocus);
+    document.addEventListener('focusout', this._lyrBlur);
+    document.addEventListener('keyup', this._lyrPlaceEv);
+    document.addEventListener('mouseup', this._lyrPlaceEv);
+    document.addEventListener('input', this._lyrPlaceEv);
+    document.addEventListener('scroll', this._lyrPlaceEv, true);
+    document.addEventListener('compositionstart', this._lyrImeOn);
+    document.addEventListener('compositionend', this._lyrImeOff);
+    document.addEventListener('selectionchange', this._lyrSel);
+  }
+  lyricFlash(ta) {
+    let n = ta;
+    while (n && !n.style.getPropertyValue('--flash')) n = n.parentElement;
+    if (!n) return 'var(--color-text)';
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--flash)';
+    n.appendChild(probe);
+    const c = getComputedStyle(probe).color;
+    probe.remove();
+    return c || 'var(--color-text)';
+  }
+  lyricCaretBox(ta) {
+    const cs = getComputedStyle(ta), start = ta.selectionStart || 0;
+    const div = document.createElement('div');
+    div.style.cssText = 'position:absolute;visibility:hidden;white-space:pre-wrap;word-wrap:break-word;overflow:hidden;top:0;left:0';
+    ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'letterSpacing', 'lineHeight', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].forEach(p => { div.style[p] = cs[p]; });
+    div.style.boxSizing = 'border-box';
+    div.style.width = ta.clientWidth + 'px';
+    div.textContent = ta.value.slice(0, start);
+    const span = document.createElement('span');
+    const ch = ta.value.slice(start, start + 1);
+    span.textContent = !ch || ch === '\n' ? '\u200b' : ch;
+    div.appendChild(span);
+    document.body.appendChild(div);
+    const d = div.getBoundingClientRect(), s = span.getBoundingClientRect(), r = ta.getBoundingClientRect();
+    const bl = parseFloat(cs.borderLeftWidth) || 0, bt = parseFloat(cs.borderTopWidth) || 0;
+    const box = { x: r.left + bl + (s.left - d.left) - ta.scrollLeft, y: r.top + bt + (s.top - d.top) - ta.scrollTop, h: s.height || parseFloat(cs.lineHeight) || 24 };
+    div.remove();
+    return box;
+  }
+  placeLyrCaret() {
+    const bar = this._lyrCaret, ta = this._lyrTa;
+    if (!bar) return;
+    const hide = () => { bar.style.display = 'none'; if (ta) ta.classList.remove('lyr-thick'); };
+    if (!ta || !ta.isConnected || document.activeElement !== ta || ta.classList.contains('lyr-ime') || ta.selectionStart !== ta.selectionEnd) { hide(); return; }
+    const box = this.lyricCaretBox(ta), r = ta.getBoundingClientRect();
+    if (box.y < r.top + 1 || box.y + box.h > r.bottom - 1 || box.x < r.left || box.x > r.right - 2) { hide(); return; }
+    ta.classList.add('lyr-thick');
+    bar.style.display = 'block';
+    bar.style.background = this.lyricFlash(ta);
+    bar.style.left = Math.round(box.x - 1) + 'px';
+    bar.style.top = Math.round(box.y) + 'px';
+    bar.style.height = Math.round(Math.max(14, box.h * 0.92)) + 'px';
   }
   componentDidMount() {
     this._prevState = this.state;
@@ -3900,6 +4064,7 @@ class Component extends DCLogic {
       else if ((e.key === 'p' || e.key === 'P') && !st.device) st.present ? this.exitPresent() : this.enterPresent();
     };
     window.addEventListener('keydown', this.onKey);
+    this.mountLyrCaret();
   }
   enterPresent() { this.setState({ present: true }); }
   exitPresent() {
@@ -3907,7 +4072,7 @@ class Component extends DCLogic {
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
   }
   isDevice() { return window.innerWidth < 700 || (window.matchMedia && matchMedia('(pointer: coarse)').matches && window.innerWidth < 1400); }
-  componentWillUnmount() { this.stopAudio(); window.removeEventListener('resize', this.onResize); window.removeEventListener('orientationchange', this.onResize); if (window.visualViewport) { window.visualViewport.removeEventListener('resize', this.onResize); window.visualViewport.removeEventListener('scroll', this.onResize); } window.removeEventListener('pointerdown', this.onUnlock, true); window.removeEventListener('touchend', this.onUnlock, true); window.removeEventListener('keydown', this.onKey); document.removeEventListener('fullscreenchange', this.onFs); document.removeEventListener('visibilitychange', this.onVis); }
+  componentWillUnmount() { this.stopAudio(); window.removeEventListener('resize', this.onResize); window.removeEventListener('orientationchange', this.onResize); if (window.visualViewport) { window.visualViewport.removeEventListener('resize', this.onResize); window.visualViewport.removeEventListener('scroll', this.onResize); } window.removeEventListener('pointerdown', this.onUnlock, true); window.removeEventListener('touchend', this.onUnlock, true); window.removeEventListener('keydown', this.onKey); document.removeEventListener('fullscreenchange', this.onFs); document.removeEventListener('visibilitychange', this.onVis); document.removeEventListener('focusin', this._lyrFocus); document.removeEventListener('focusout', this._lyrBlur); document.removeEventListener('keyup', this._lyrPlaceEv); document.removeEventListener('mouseup', this._lyrPlaceEv); document.removeEventListener('input', this._lyrPlaceEv); document.removeEventListener('scroll', this._lyrPlaceEv, true); document.removeEventListener('compositionstart', this._lyrImeOn); document.removeEventListener('compositionend', this._lyrImeOff); document.removeEventListener('selectionchange', this._lyrSel); if (this._lyrCaret) this._lyrCaret.remove(); }
 
   setBpm(v) { this.setState({ bpm: Math.max(30, Math.min(260, Math.round(v))) }); }
   setBeats(n) { n = Math.max(1, Math.min(16, n)); this.setState(s => ({ beats: n, accents: fitAccents(s.accents, n), strum: fitStrum(s.strum, s.grid, n, s.grid), pluckPat: fitPluck(s.pluckPat, s.grid, n, s.grid), pluckPat2: fitPluck(s.pluckPat2, s.grid, n, s.grid) })); }
@@ -4841,17 +5006,18 @@ class Component extends DCLogic {
     const totalBeats = secs.reduce((a, x) => a + x.beats * sectionPlayBars(x), 0);
     const songOn = s.playing && s.mode === 'song';
     const ev = songOn && this.ev && s.songPos >= 0 ? this.ev[s.songPos] : null;
-    const kEff = this.keyEff(), ki0 = keyInfo(song.key || inferKey(song));
+    const kEff = this.keyEff(), ki0 = keyInfo(song.key);
     const kAt = n => ki0 ? { pc: ((ki0.pc + n) % 12 + 12) % 12, minor: ki0.minor } : null;
     const soundKi = kAt(kEff.tp), shapeKi = kAt(kEff.tp - kEff.capo);
     const fR = soundKi ? useFlats(soundKi) : false, fS = shapeKi ? useFlats(shapeKi) : false;
     const real = ch => xChord(ch, kEff.tp, fR), shape = ch => xChord(ch, kEff.tp - kEff.capo, fS);
     const dch = ch => (!ch || ch === '.') ? ch : kEff.capo ? shape(ch) : real(ch);
     const rch = ch => (ch && ch !== '.' && kEff.capo) ? real(ch) : '';
+    const matches = matchKeys(song);
     const keyVals = {
       kKey: soundKi ? keyName(soundKi) : '–', kDirty: kEff.dirty,
       songKey: ki0 ? keyName(ki0) : '',
-      keyOpts: (() => { const cur = ki0 ? keyName(ki0) : ''; const list = KEY_LIST.slice(); if (cur && list.indexOf(cur) < 0) list.unshift(cur); return list.map(v => ({ v, label: v })); })(),
+      keyOpts: (() => { const cur = ki0 ? keyName(ki0) : ''; const list = matches.slice(); if (cur && list.indexOf(cur) < 0) list.unshift(cur); return list.map(v => ({ v, label: v })); })(),
       onKeyPick: e => {
         const v = e.target.value;
         const song = this.curSong(), id = song.id;
@@ -4869,7 +5035,7 @@ class Component extends DCLogic {
         }));
         if (moved) this.flash(zh ? '和弦和歌词里的和弦已改到新调' : 'Chords in the chart and lyrics moved to the new key');
       },
-      keyFamily: ki0 ? familyOf(ki0).join(' · ') : L('Choose the original key. The chord list follows that key.'),
+      keyFamily: ki0 ? degreesOf(ki0).map(d => d.v).join(' · ') : (matches.length ? (zh ? '第一段最接近：' : 'Closest: ') + matches.join(' · ') : L('Add chords in the first section. The closest keys show up here.')),
       noKey: !ki0,
       tpKey: soundKi ? keyName(soundKi) : '',
       tpOpts: ki0 ? (ki0.minor ? KEY_LIST.slice(12) : KEY_LIST.slice(0, 12)).map(v => ({ v, label: v })) : [],
@@ -4883,7 +5049,7 @@ class Component extends DCLogic {
       capoVal: String(kEff.capo || 0),
       capoOpts: [0, 1, 2, 3, 4, 5, 6, 7].map(n => ({ v: String(n), label: n ? (zh ? n + ' 品' : 'Fret ' + n) : (zh ? '无' : 'None') })),
       onCapoPick: e => this.setKd(kEff.tp, +e.target.value || 0),
-      kNote: [!ki0 ? L('Add chords to detect the key') : kEff.tp ? (zh ? '原调 ' : 'Original ') + keyName(ki0) + ' · ' + (kEff.tp > 0 ? '+' : '') + kEff.tp : L('Original key')].concat(kEff.capo && shapeKi ? [zh ? '变调夹 ' + kEff.capo + ' 品 · 按 ' + keyName(shapeKi) + ' 指法' : 'Capo ' + kEff.capo + ' · play ' + keyName(shapeKi) + ' shapes'] : []).join(' · '),
+      kNote: [!ki0 ? (matches.length ? (zh ? '选出最接近的原调' : 'Pick the closest key') : L('Add chords in the first section. The closest keys show up here.')) : kEff.tp ? (zh ? '原调 ' : 'Original ') + keyName(ki0) + ' · ' + (kEff.tp > 0 ? '+' : '') + kEff.tp : L('Original key')].concat(kEff.capo && shapeKi ? [zh ? '变调夹 ' + kEff.capo + ' 品 · 按 ' + keyName(shapeKi) + ' 指法' : 'Capo ' + kEff.capo + ' · play ' + keyName(shapeKi) + ' shapes'] : []).join(' · '),
       kHint: (!ki0 || !soundKi) ? '' : ((((soundKi.pc - ki0.pc) % 12 + 12) % 12) > 7 ? (zh ? '这个调比原调低，变调夹到不了，直接按新调指法' : 'This key is below the original. A capo cannot reach it — play the new shapes.') : ''),
       kSuggest: (() => {
         if (!ki0 || !soundKi) return '';
@@ -4946,6 +5112,7 @@ class Component extends DCLogic {
       setPrev: () => this.goSet(-1), setNext: () => this.goSet(1), setPrevOff: setIdx <= 0, setNextOff: !nxS,
       setNextLabel: nxS ? (zh ? '下一首：' : 'Next: ') + nxS.name : L('End of set list'),
       trOn: !!tr.on, trSw: sw(!!tr.on), trToggle: () => this.trToggle(),
+      trBg: tr.on ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', trBd: tr.on ? acc : 'var(--color-divider)', trFg: tr.on ? 'var(--acc-text)' : ink,
       trNote: !tr.on ? L('Speed up a little every few bars') : s.bpm >= tr.target ? L('Target reached') + ' · ' + tr.target + ' BPM' : metroOn ? (zh ? '现在 ' + s.bpm + ' → ' + tr.target : 'Now ' + s.bpm + ' → ' + tr.target) : (zh ? '从 ' + s.bpm + ' 到 ' + tr.target + '，每 ' + tr.every + ' 小节 +' + tr.step : 'From ' + s.bpm + ' to ' + tr.target + ', +' + tr.step + ' every ' + tr.every + (tr.every > 1 ? ' bars' : ' bar')),
       trSteppers: [
         { label: L('+ BPM'), value: '+' + tr.step, decAria: 'Smaller step', incAria: 'Bigger step', dec: () => this.setTr({ step: Math.max(1, tr.step - 1) }), inc: () => this.setTr({ step: Math.min(20, tr.step + 1) }) },
@@ -5032,8 +5199,8 @@ class Component extends DCLogic {
           npCols: colsFor(sec.beats), npBeats: barCells(sec, ev.sec, ev.pb, false), npNext };
       }
     }
-    const fam = familyOf(ki0 || { pc: 0, minor: false });
-    const optList = cur => { const vals = fam.slice(); if (cur && vals.indexOf(cur) < 0) vals.push(cur); return vals.map(v => ({ v, label: v })); };
+    const baseOpts = ki0 ? degreesOf(ki0).map(d => ({ v: d.v, label: d.v })) : KEY_LIST.map(v => ({ v, label: v }));
+    const optList = cur => { const vals = baseOpts.slice(); if (cur && !vals.some(o => o.v === cur)) vals.push({ v: cur, label: cur }); return vals; };
     const pracIds = (s.prac && s.prac[song.id]) || [];
     const pracOrder = secs.map((sec, i) => pracIds.includes(sec.id) ? i : -1).filter(i => i >= 0);
     const pracNote = pracOrder.length ? L('Practice: ') + pracOrder.map(i => secs[i].name).join(' → ') : L('Tick a section to practice it. Leave them all off to play the whole song.');
@@ -5072,7 +5239,7 @@ class Component extends DCLogic {
               ? (zh ? '重复 ' + sec.repeat + ' 次，每次换下一行歌词。' : 'Repeat ×' + sec.repeat + '. Each time through the chords moves to the next lyric line.')
               : (zh ? '每行 ' + step + ' 小节，然后换下一行。这段一共 ' + total + ' 小节。' : 'Each line is ' + step + ' bars, then the next line. This part is ' + total + ' bars.')
                 + (cover > total ? (zh ? ' 小节不够覆盖每一行，把每行小节数调小。' : ' Not enough bars for every line — lower bars per line.') : '')) : '' };
-        })(), bg: here || sel ? 'var(--color-surface)' : 'transparent', numColor: here ? 'var(--acc-text)' : 'var(--muted)',
+        })(), bg: sel ? 'color-mix(in srgb, var(--color-accent) 12%, var(--color-surface))' : 'var(--color-surface)', cardBd: (sel || here) ? acc : 'transparent', numColor: here ? 'var(--acc-text)' : 'var(--muted)',
         prac: pracIds.includes(sec.id),
         pracAria: (pracIds.includes(sec.id) ? L('Stop practicing ') : L('Practice ')) + sec.name,
         pracBd: pracIds.includes(sec.id) ? acc : 'var(--color-divider)',
@@ -5089,7 +5256,7 @@ class Component extends DCLogic {
         gridOpts: gridOpts(sec.sub, sg, v => this.updSec(i, y => refitSec(y, y.beats, y.sub, y.patternBars, v))),
         sigLabel: sec.beats + '/' + (sec.den || 4),
         denOpts: [2, 4, 8, 16].map(d => { const on = (sec.den || 4) === d; return { label: String(d), checked: on, bg: on ? acc : 'transparent', fg: on ? 'var(--acc-ink)' : ink, pick: () => this.updSec(i, x => ({ ...x, den: d })) }; }),
-        quickSigs: QUICK.map(([n, d]) => { const on = sec.beats === n && (sec.den || 4) === d; return { label: n + '/' + d, bg: on ? ink : 'transparent', fg: on ? 'var(--color-bg)' : ink, bd: on ? ink : 'var(--color-divider)', pick: () => this.setSecSig(i, n, d) }; }),
+        quickSigs: QUICK.map(([n, d]) => { const on = sec.beats === n && (sec.den || 4) === d; return { label: n + '/' + d, bg: on ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-bg)', fg: on ? 'var(--acc-text)' : ink, bd: on ? acc : 'var(--color-divider)', pick: () => this.setSecSig(i, n, d) }; }),
         accLegend: (() => { const a = fitAccents(sec.accents || [], sec.beats); return a.filter(x => x === 'one').length + ' ' + L('first') + ' · ' + a.filter(x => x === 'accent').length + ' ' + L('accent') + ' · ' + a.filter(x => x === 'mute').length + ' ' + L('mute'); })(),
         accCols: colsFor(sec.beats),
         accCells: fitAccents(sec.accents || [], sec.beats).map((a, bi) => {
@@ -5112,27 +5279,41 @@ class Component extends DCLogic {
     });
     const dv = !!s.device || !!s.present, vw = s.vw || 390, vh = s.vh || 844;
     const wide = dv && vw > vh && vw >= 700;
-    const lyrOn = song.lyricsOn !== false, curSec = ev && !ev.ci ? secs[ev.sec] : null;
+    const lyrOn = song.lyricsOn !== false, cursorOn = s.lyrCursor !== false, curSec = ev && !ev.ci ? secs[ev.sec] : null;
     const focusIdx = ev && !ev.ci ? ev.sec : ((s.pracPlay && s.pracPlay.length) ? s.pracPlay[0] : (s.solo != null ? s.solo : 0));
     const focusSec = secs[focusIdx] || null;
-    const lyrBlocks = !songOn || !lyrOn ? [] : playOrder.map(si => {
-      const sec = secs[si]; if (!sec) return null;
-      const lines = lyrLines(sec.lyrics); if (!lines.length) return null;
-      const here = !!curSec && ev.sec === si;
-      const step = Math.max(1, lyricStep(sec, lines.length));
-      const al = here ? Math.min(lines.length - 1, Math.floor(ev.bar / step)) : -1;
-      const local = here ? ev.bar - al * step : 0;
-      return { name: sec.name, fg: here ? 'var(--acc-text)' : 'var(--muted)', lines: lines.map((ln, li) => {
-        const act = here && li === al, parsed = parseLyric(ln), chordAtSeg = [];
-        parsed.forEach((x, i) => { if (x.chord) chordAtSeg.push(i); });
-        const hot = act && chordAtSeg.length ? chordAtSeg[Math.min(chordAtSeg.length - 1, Math.floor(local * chordAtSeg.length / step))] : -1;
-        const segs = parsed.map((x, i) => ({ ...x, chord: dch(x.chord), real: rch(x.chord), pr: x.chord ? '6px' : '0', cColor: act && hot >= 0 && i !== hot ? 'var(--muted)' : 'var(--acc-text)', rColor: 'var(--muted)', weight: act && i === hot ? '800' : '600' }));
-        return { k: si + '-' + li, act: act ? '1' : '0', bg: act ? 'var(--color-surface)' : 'transparent', op: act ? 1 : 0.55, segs, chH: segs.some(x => x.chord) ? Math.round((wide ? 18 : 16) * 1.25 * lyrSc) + 'px' : '0' };
-      }) };
-    }).filter(Boolean);
+    const lyrBlocks = !songOn || !lyrOn ? [] : (() => {
+      const groups = [], byKey = new Map();
+      playOrder.forEach(si => {
+        const sec = secs[si]; if (!sec) return;
+        const lines = lyrLines(sec.lyrics); if (!lines.length) return;
+        const id = lyricIdent(sec);
+        const prev = id ? byKey.get(id) : null;
+        if (prev) prev.srcs.push(si);
+        else { const g = { si, sec, lines, srcs: [si] }; if (id) byKey.set(id, g); groups.push(g); }
+      });
+      return groups.map(g => {
+        const playing = !!(curSec && g.srcs.includes(ev.sec));
+        const follow = playing && cursorOn;
+        const beats = Math.max(1, (ev && secs[ev.sec] && secs[ev.sec].beats) || 4);
+        const cur = follow ? lyricCursor(secs[ev.sec], g.lines, ev.bar, (ev.beat || 0) / beats) : { al: -1, hot: -1 };
+        return { name: g.sec.name, hk: 'h-' + g.si, fg: follow ? 'var(--acc-text)' : 'var(--muted)', lines: g.lines.map((ln, li) => {
+          const act = follow && li === cur.al, parsed = parseLyric(ln);
+          const hot = act ? cur.hot : -1;
+          const segs = parsed.map((x, i) => {
+            const hotNow = !!(act && hot >= 0 && i === hot && x.chord);
+            return { ...x, chord: dch(x.chord), real: rch(x.chord), pr: x.chord ? '6px' : '0',
+              cColor: hotNow ? 'var(--flash-ink)' : (act && hot >= 0 && x.chord && i !== hot ? 'var(--muted)' : 'var(--acc-text)'),
+              cBg: hotNow ? 'var(--flash)' : 'transparent', cPad: x.chord ? '0 2px' : '0',
+              rColor: hotNow ? 'var(--flash-ink)' : 'var(--muted)', weight: hotNow ? '800' : '600' };
+          });
+          return { k: g.si + '-' + li, act: act ? '1' : '0', bg: act ? 'var(--color-surface)' : 'transparent', op: act ? 1 : (cursorOn ? 0.55 : 1), segs, chH: segs.some(x => x.chord) ? Math.round((wide ? 18 : 16) * 1.25 * lyrSc) + 'px' : '0' };
+        }) };
+      });
+    })();
     const lyrFlat = [];
     lyrBlocks.forEach(blk => {
-      lyrFlat.push({ head: true, line: false, k: 'h-' + blk.name, name: blk.name, fg: blk.fg, segs: [], act: '0', bg: 'transparent', op: 1, chH: '0' });
+      lyrFlat.push({ head: true, line: false, k: blk.hk || ('h-' + blk.name), name: blk.name, fg: blk.fg, segs: [], act: '0', bg: 'transparent', op: 1, chH: '0' });
       blk.lines.forEach(ln => lyrFlat.push({ head: false, line: true, name: '', fg: blk.fg, ...ln }));
     });
     const plan = s.lyrFull ? this._lyrPlan : null;
@@ -5156,7 +5337,7 @@ class Component extends DCLogic {
     const playBase = focusSec ? sectionBaseBars(focusSec) : 1;
     const playRep = focusSec ? Math.max(1, focusSec.repeat || 1) : 1;
     const playPass = ev && !ev.ci && focusSec && ev.sec === focusIdx ? Math.floor(ev.bar / playBase) + 1 : 1;
-    const playChart = showChart ? Array.from({ length: Math.max(1, parseChords(focusSec.chords).length) }, (_, b) => { const act = !!(ev && !ev.ci && ev.sec === focusIdx && (ev.bar % playBase) === b); return { n: b + 1, text: barText(pcb, b, dch), real: kEff.capo ? barText(pcb, b, real) : '', bg: act ? 'var(--flash)' : 'transparent', fg: act ? 'var(--flash-ink)' : ink, nfg: act ? 'var(--flash-ink)' : 'var(--muted)', bd: act ? 'var(--flash)' : 'var(--color-divider)' }; }) : [];
+    const playChart = showChart ? Array.from({ length: Math.max(1, parseChords(focusSec.chords).length) }, (_, b) => { const act = !!(cursorOn && ev && !ev.ci && ev.sec === focusIdx && (ev.bar % playBase) === b); return { n: b + 1, text: barText(pcb, b, dch), real: kEff.capo ? barText(pcb, b, real) : '', bg: act ? 'var(--flash)' : 'transparent', fg: act ? 'var(--flash-ink)' : ink, nfg: act ? 'var(--flash-ink)' : 'var(--muted)', bd: act ? 'var(--flash)' : 'var(--color-divider)' }; }) : [];
     const chartTitle = focusSec ? focusSec.name + (playRep > 1 ? (zh ? ' · 第 ' + playPass + ' / ' + playRep + ' 遍' : ' · pass ' + playPass + ' / ' + playRep) : '') : '';
     const curChord = (ev && ev.chord && dch(ev.chord)) || '–', curReal = ev && ev.chord && kEff.capo ? (zh ? '实际 ' : 'Sounds ') + real(ev.chord) : '';
     let nextChord = '', nextBeats = 0;
@@ -5188,17 +5369,17 @@ class Component extends DCLogic {
       secCount: secs.length, totalBars, songLength: fmtLen(Math.round(totalBeats * 60 / song.bpm + (secs[0] ? secs[0].beats * 60 / song.bpm : 0))),
       songOn, songOff: !songOn, paused: !!s.paused, pauseIcon: !s.paused, pauseLabel: s.paused ? L('Resume') : L('Pause'),
       togglePause: () => s.paused ? this.resumeSong() : this.pauseSong(),
-      pauseBg: s.paused ? acc : 'transparent', pauseFg: s.paused ? 'var(--acc-ink)' : ink, pauseBd: s.paused ? acc : 'var(--color-divider)',
+      pauseBg: s.paused ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', pauseFg: s.paused ? 'var(--acc-text)' : ink, pauseBd: s.paused ? acc : 'var(--color-divider)',
       songBarCols: songOn ? 'repeat(5,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))', ...np, secRows, pracNote, addSection: () => this.addSection(),
       toggleSong: () => this.toggleSong(),
       songLoop: !!s.songLoop, toggleSongLoop: () => this.setState({ songLoop: !s.songLoop }),
       guitarOn: !!s.guitar, guitarSw: sw(!!s.guitar), toggleGuitar: () => { const on = !s.guitar; this.setState({ guitar: on }); if (on) this.loadGuitar(); },
-      gBg: s.guitar ? acc : 'transparent', gFg: s.guitar ? 'var(--acc-ink)' : ink, gBd: s.guitar ? acc : 'var(--color-divider)',
+      gBg: s.guitar ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', gFg: s.guitar ? 'var(--acc-text)' : ink, gBd: s.guitar ? acc : 'var(--color-divider)',
       pluckOn: !!s.pluck, togglePluck: () => { const on = !s.pluck; this.setState({ pluck: on }); if (on) this.loadGuitar(); },
-      pBg: s.pluck ? ink : 'transparent', pFg: s.pluck ? 'var(--color-bg)' : ink, pBd: s.pluck ? ink : 'var(--color-divider)',
+      pBg: s.pluck ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', pFg: s.pluck ? 'var(--acc-text)' : ink, pBd: s.pluck ? acc : 'var(--color-divider)',
       strumSndOn: !!s.strumSnd, toggleStrumSnd: () => { const on = !s.strumSnd; this.setState({ strumSnd: on }); if (on) this.loadGuitar(); },
-      sndBg: s.strumSnd ? ink : 'transparent', sndFg: s.strumSnd ? 'var(--color-bg)' : ink, sndBd: s.strumSnd ? ink : 'var(--color-divider)',
-      loopBg: s.songLoop ? ink : 'transparent', loopFg: s.songLoop ? 'var(--color-bg)' : ink, loopBd: s.songLoop ? ink : 'var(--color-divider)',
+      sndBg: s.strumSnd ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', sndFg: s.strumSnd ? 'var(--acc-text)' : ink, sndBd: s.strumSnd ? acc : 'var(--color-divider)',
+      loopBg: s.songLoop ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', loopFg: s.songLoop ? 'var(--acc-text)' : ink, loopBd: s.songLoop ? acc : 'var(--color-divider)',
       loopNote: s.solo != null ? L('Loop') + ' · ' + (secs[s.solo] ? secs[s.solo].name : '') : ((songOn && s.pracPlay && s.pracPlay.length) ? ((s.songLoop ? L('Loop') + ' · ' : '') + s.pracPlay.map(i => secs[i] && secs[i].name).filter(Boolean).join(' → ')) : L(s.songLoop ? 'Looping song' : 'Plays once')),
       npCellH: compact ? '76px' : '132px', npGlyph: (() => { const sc = ev && !ev.ci ? secs[ev.sec] : null; return (compact ? { 1: '40px', 2: '32px', 3: '26px', 4: '20px' } : { 1: '64px', 2: '46px', 3: '34px', 4: '26px' })[sc ? gOf(sc) : 1]; })(),
       notFull: !fullOn, fullOn, fullDir: wide ? 'row' : 'column', fullRightBd: wide ? '0' : '2px solid var(--color-divider)',
@@ -5206,7 +5387,11 @@ class Component extends DCLogic {
       playTopMax: (showLyr && !wide) ? '32%' : 'none',
       playLyrFlex: (showLyr && wide) ? '2 1 0' : '1 1 0',
       showStrum: !(showLyr && !wide),
-      lyricsOn: lyrOn, lyrSw: sw(lyrOn), toggleLyrics: () => this.updSong(x => ({ ...x, lyricsOn: x.lyricsOn === false })),
+      lyricsOn: lyrOn, cursorOn, toggleCursor: () => this.setState(st => ({ lyrCursor: st.lyrCursor === false })),
+      cursorSw: sw(cursorOn), cursorBd: cursorOn ? acc : 'var(--color-divider)', cursorFg: cursorOn ? 'var(--acc-text)' : ink, cursorBg: cursorOn ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)',
+      lyrSw: sw(lyrOn), lyricsBd: lyrOn ? acc : 'var(--color-divider)', lyricsFg: lyrOn ? 'var(--acc-text)' : ink, lyricsBg: lyrOn ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)',
+      fullBd: s.lyrFull ? acc : 'var(--color-divider)', fullFg: s.lyrFull ? 'var(--acc-text)' : ink, fullBg: s.lyrFull ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)',
+      toggleLyrics: () => this.updSong(x => ({ ...x, lyricsOn: x.lyricsOn === false })),
       showLyr, showChart, chartTitle, lyrBlocks, lyrFlat, lyrCols, lyrPageNote, lyrMeasureW: '120px', playChart, lyrRef: this.lyrRef, lyrStageRef: this.lyrStageRef, lyrMeasureRef: this.lyrMeasureRef, lyrSize: Math.round((wide ? 26 : 21) * lyrSc) + 'px', lyrChordSize: Math.round((wide ? 18 : 16) * lyrSc) + 'px',
       lyrFull: !!s.lyrFull, lyrFullSw: sw(!!s.lyrFull),
       lyrFullOn: !!(s.lyrFull && showLyr),
@@ -5255,7 +5440,7 @@ class Component extends DCLogic {
       denOpts: [2, 4, 8, 16].map(d => ({ label: String(d), checked: s.den === d, bg: s.den === d ? acc : 'transparent', fg: s.den === d ? 'var(--acc-ink)' : ink, pick: () => this.setState({ den: d }) })),
       quickSigs: QUICK.map(([n, d]) => {
         const on = s.beats === n && s.den === d;
-        return { label: `${n}/${d}`, bg: on ? ink : 'transparent', fg: on ? 'var(--color-bg)' : ink, bd: on ? ink : 'var(--color-divider)', pick: () => this.setSig(n, d) };
+        return { label: `${n}/${d}`, bg: on ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', fg: on ? 'var(--acc-text)' : ink, bd: on ? acc : 'var(--color-divider)', pick: () => this.setSig(n, d) };
       }),
       subOpts: SUBS.map(x => ({ label: L(x.label), checked: s.sub === x.v, bg: s.sub === x.v ? acc : 'transparent', fg: s.sub === x.v ? 'var(--acc-ink)' : ink, pick: () => this.setSub(x.v) })),
       gridOpts: gridOpts(s.sub, s.grid || s.sub, v => this.setGrid(v)),
