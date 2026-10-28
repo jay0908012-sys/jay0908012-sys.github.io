@@ -2902,14 +2902,24 @@ const __ds_scope = {};
 <sc-for list="{{ row.cells }}" as="bar">
 <div style="min-width:0;display:flex;flex-direction:column;gap:3px">
 <span style="font-weight:800;font-size:12px;color:var(--muted)">{{ bar.n }}</span>
-<select class="input" value="{{ bar.a }}" sc-camel-on-change="{{ bar.onA }}" aria-label="{{ bar.aAria }}" style="min-height:40px;font-size:15px;font-weight:800;padding:0 4px">
+<sc-if value="{{ bar.typeA }}" hint-placeholder-val="{{ false }}">
+<input class="input" data-ctype="{{ bar.kA }}" value="{{ bar.a }}" sc-camel-on-change="{{ bar.onA }}" sc-camel-on-pointer-down="{{ bar.tapA }}" sc-camel-on-double-click="{{ bar.toListA }}" aria-label="{{ bar.aAria }}" placeholder="Cmaj7" autocapitalize="off" autocorrect="off" spellcheck="false" style="min-height:40px;font-size:15px;font-weight:800;padding:0 4px;text-align:center">
+</sc-if>
+<sc-if value="{{ bar.listA }}" hint-placeholder-val="{{ true }}">
+<select class="input" value="{{ bar.a }}" sc-camel-on-change="{{ bar.onA }}" sc-camel-on-pointer-down="{{ bar.tapA }}" sc-camel-on-double-click="{{ bar.toTypeA }}" aria-label="{{ bar.aAria }}" style="min-height:40px;font-size:15px;font-weight:800;padding:0 4px">
 <option value="">–</option>
 <sc-for list="{{ bar.optsA }}" as="op"><option value="{{ op.v }}">{{ op.label }}</option></sc-for>
 </select>
-<select class="input" value="{{ bar.b }}" sc-camel-on-change="{{ bar.onB }}" aria-label="{{ bar.bAria }}" style="min-height:36px;font-size:14px;font-weight:700;padding:0 4px">
+</sc-if>
+<sc-if value="{{ bar.typeB }}" hint-placeholder-val="{{ false }}">
+<input class="input" data-ctype="{{ bar.kB }}" value="{{ bar.b }}" sc-camel-on-change="{{ bar.onB }}" sc-camel-on-pointer-down="{{ bar.tapB }}" sc-camel-on-double-click="{{ bar.toListB }}" aria-label="{{ bar.bAria }}" placeholder="Cmaj7" autocapitalize="off" autocorrect="off" spellcheck="false" style="min-height:36px;font-size:14px;font-weight:700;padding:0 4px;text-align:center">
+</sc-if>
+<sc-if value="{{ bar.listB }}" hint-placeholder-val="{{ true }}">
+<select class="input" value="{{ bar.b }}" sc-camel-on-change="{{ bar.onB }}" sc-camel-on-pointer-down="{{ bar.tapB }}" sc-camel-on-double-click="{{ bar.toTypeB }}" aria-label="{{ bar.bAria }}" style="min-height:36px;font-size:14px;font-weight:700;padding:0 4px">
 <option value="">–</option>
 <sc-for list="{{ bar.optsB }}" as="op"><option value="{{ op.v }}">{{ op.label }}</option></sc-for>
 </select>
+</sc-if>
 </div>
 </sc-for>
 </div>
@@ -3875,7 +3885,7 @@ Object.assign(ZH, { 'Dom / Da': '咚 / 哒', 'Kick / Hat': '底鼓 / 镲', 'Cowb
   'Chords': '和弦', 'Put | between bars. Two chords in one bar share it evenly. Use . to hold a beat: D . . Em': '小节之间用 | 分隔。一个小节写两个和弦会平分拍子。用 . 延长一拍：D . . Em',
   'Lyrics': '歌词', '[G]Here comes the [D]first line\n[Em]Chords go in [C]brackets': '[G]这里是 [D]第一句\n[Em]和弦写在 [C]方括号里', 'Put the chord in [brackets] just before the word where it changes.': '把和弦写在 [方括号] 里，放在换和弦的那个字前面。',
   'Bars per line': '每行小节数', 'Write lyrics in each section and show them while the song plays': '在每个段落写歌词，播放时显示', 'Chord': '和弦', 'Next': '下一个' });
-Object.assign(TK, { chords: 'Chords', chordsPh: 'G | D Em | C | D', chordsHint: 'Set the chords in the first section. The closest keys are listed above. After you pick one, each chord list is degrees 1 to 7 of that key.', lyrics: 'Lyrics', lyricsPh: '[G]Here comes the [D]first line\n[Em]Chords go in [C]brackets', lyricsHint: 'Put the chord in [brackets] on the word where it changes. Bars per line is how long one lyric line lasts. The highlight moves down, including on each repeat.', barsPerLine: 'Bars per line', lyricsSwitch: 'Lyrics', lyricsSwitchDesc: 'Write lyrics in each section and show them while the song plays', chordLbl: 'Chord', nextLbl: 'Next', pairsHead: 'Accent / beat pairs', pairsDesc: 'Easy to tell apart while you play', origKey: 'Original key', chooseKey: 'Choose key', chord1: 'Chord', chord2: '2nd chord', chordTwoShort: '4 per line', addBar: 'Add bar', removeBar: 'Remove bar', repeatHint: 'Repeat plays this whole chord list that many times. It does not add chord boxes. A different strum pattern needs its own section.' });
+Object.assign(TK, { chords: 'Chords', chordsPh: 'G | D Em | C | D', chordsHint: 'Set the chords in the first section. The closest keys are listed above. After you pick one, each chord list is degrees 1 to 7 of that key. Double-click a chord to type any chord. Double-click again for the list.', lyrics: 'Lyrics', lyricsPh: '[G]Here comes the [D]first line\n[Em]Chords go in [C]brackets', lyricsHint: 'Put the chord in [brackets] on the word where it changes. Bars per line is how long one lyric line lasts. The highlight moves down, including on each repeat.', barsPerLine: 'Bars per line', lyricsSwitch: 'Lyrics', lyricsSwitchDesc: 'Write lyrics in each section and show them while the song plays', chordLbl: 'Chord', nextLbl: 'Next', pairsHead: 'Accent / beat pairs', pairsDesc: 'Easy to tell apart while you play', origKey: 'Original key', chooseKey: 'Choose key', chord1: 'Chord', chord2: '2nd chord', chordTwoShort: '4 per line', addBar: 'Add bar', removeBar: 'Remove bar', repeatHint: 'Repeat plays this whole chord list that many times. It does not add chord boxes. A different strum pattern needs its own section.' });
 const COLORS = [{ v: 'Teal', h: 192, k: 0.7 }, { v: 'Sage', h: 150, k: 0.5 }, { v: 'Ocean', h: 245, k: 0.65 }, { v: 'Lavender', h: 295, k: 0.55 }, { v: 'Sand', h: 70, k: 0.6 }, { v: 'Rose', h: 10, k: 0.55 }, { v: 'Classic', h: null }];
 const OLD_COLOR = { Red: 'Classic', Blue: 'Ocean', Green: 'Sage', Orange: 'Sand', Purple: 'Lavender' };
 const RAMP = { 100: [0.96, 0.03], 200: [0.9, 0.07], 300: [0.82, 0.12], 400: [0.72, 0.16], 500: [0.62, 0.19], 600: [0.54, 0.18], 700: [0.46, 0.15], 800: [0.36, 0.11], 900: [0.26, 0.07] };
@@ -3885,6 +3895,7 @@ const neutVars = h => Object.fromEntries(Object.entries(NEUT).map(([n, l]) => ['
 Object.assign(ZH, { 'Theme': '主题', 'Colours for the whole app. Dark mode is a separate switch above.': '整个应用的配色。深色模式在上方单独开关。', 'Teal': '青绿', 'Sage': '鼠尾草', 'Ocean': '海蓝', 'Lavender': '薰衣草', 'Sand': '沙金', 'Rose': '玫瑰', 'Classic': '经典红' });
 Object.assign(TK, { colour: 'Theme', colourDesc: 'Colours for the whole app. Dark mode is a separate switch above.' });
 Object.assign(ZH, { 'Choose the original key. The chord list follows that key.': '先选原调，和弦列表会跟着这个调走。', 'Pick the original key first. Each bar can be one chord, or two chords that split the bar.': '先选原调。每个小节可以选一个和弦，或两个和弦平分这一小节。', 'Original key': '原调', 'Choose key': '选择调', 'Chord': '和弦', '2nd chord': '第二个和弦', '1 or 2 per bar': '每小节 1 或 2 个', 'Add bar': '加小节', 'Remove bar': '去掉小节', 'Key & capo': '调与变调夹', 'Transpose': '移调', 'Capo': '变调夹', 'Reset': '重置', 'Use': '使用', 'Unsaved': '未保存', 'Save key change': '保存调的更改', 'Import from iReal Pro': '从 iReal Pro 导入', 'Open a playlist or song exported from iReal Pro as HTML.': '打开从 iReal Pro 导出的 HTML 歌单或歌曲。', 'Import songs': '导入歌曲', 'Already in Library': '曲库中已有', 'Select all': '全选', 'Select none': '全不选', 'No songs found in this file': '这个文件里没有找到歌曲', 'No capo needed': '不需要变调夹', 'Add chords to detect the key': '先选择原调', 'Add chords in the first section. The closest keys show up here.': '先在第一段选好和弦，这里会列出最接近的原调。', 'Set the chords in the first section. The closest keys are listed above. After you pick one, each chord list is degrees 1 to 7 of that key.': '先在第一段选和弦。上面会列出最接近的原调。选定后，和弦列表变成这个调的 1 到 7 级。' });
+Object.assign(ZH, { 'Set the chords in the first section. The closest keys are listed above. After you pick one, each chord list is degrees 1 to 7 of that key. Double-click a chord to type any chord. Double-click again for the list.': '先在第一段选和弦。上面会列出最接近的原调。选定后，和弦列表变成这个调的 1 到 7 级。双击和弦可改成任意输入，再双击回到列表。' });
 Object.assign(ZH, { 'Four bars on a line. The top box is the chord. The bottom box is a second chord in the same bar.': '一行四个小节。上面是和弦，下面是同一小节的第二个和弦。', 'Repeat plays this whole chord list that many times. It does not add chord boxes. A different strum pattern needs its own section.': '重复是把这一串和弦整段再弹几次，不会多出和弦格。扫弦节奏不同就另开一个段落。', 'Put the chord in [brackets] on the word where it changes. Bars per line is how long one lyric line lasts. The highlight moves down, including on each repeat.': '和弦写在 [括号] 里，放在换和弦的词前面。每行小节数是这一行唱几小节。到了就换下一行，重复时也会继续往下走。', '4 per line': '一行 4 个' });
 Object.assign(TK, { keyTitle: 'Key & capo', unsaved: 'Unsaved', use: 'Use', reset: 'Reset', saveKeyTitle: 'Save key change', transpose: 'Transpose', capo: 'Capo', impBtn: 'Import from iReal Pro', impHint: 'Open a playlist or song exported from iReal Pro as HTML.', impTitle: 'Import songs' });
 Object.assign(ZH, { 'Set list': '歌单', 'Tap the list button next to a song below to add it here.': '点下面歌曲旁的列表按钮，把歌曲加入歌单。', 'Clear set list': '清空歌单', 'Set list cleared': '歌单已清空', 'Search songs or key': '搜索歌曲或调', 'Recent': '最近', 'A–Z': '名称', 'Key': '调', 'No songs match': '没有符合的歌曲', 'Tempo trainer': '速度练习', 'Speed up a little every few bars': '每隔几小节自动加快一点', '+ BPM': '每次加', 'Every': '每隔', 'Up to': '加到', 'Target reached': '已到目标速度', 'Undo': '撤销', 'Time to back up': '该备份了', 'Later': '稍后', 'Convert chords above the lyrics into [G] style': '把歌词上方的和弦转换成 [G] 格式', 'Never backed up yet': '还没有备份过', 'End of set list': '歌单最后一首', 'Song finished': '歌曲结束' });
@@ -3966,6 +3977,12 @@ class Component extends DCLogic {
       const a = this.lyrEl.querySelector('[data-active="1"]'), k = a ? a.getAttribute('data-k') : '';
       if (k !== this._lyrK) { this._lyrK = k; if (a) this.lyrEl.scrollTo({ top: Math.max(0, a.offsetTop - this.lyrEl.clientHeight * 0.3), behavior: 'smooth' }); }
     } else this._lyrK = null;
+    if (this._focusChord) {
+      const key = this._focusChord;
+      this._focusChord = '';
+      const el = document.querySelector('[data-ctype="' + key + '"]');
+      if (el) { el.focus(); if (el.select) el.select(); }
+    }
     this.fitLyr();
     if (this.placeLyrCaret) this.placeLyrCaret();
   }
@@ -4426,6 +4443,35 @@ class Component extends DCLogic {
     while (cb.length < n) cb.push(['.']);
     return cb;
   }
+  cleanChord(v) {
+    const t = String(v == null ? '' : v).trim().replace(/\|/g, '').replace(/\s+/g, '');
+    if (!t || t === '.' || t === '-' || t === '–' || t === '·') return '';
+    return normChord(t);
+  }
+  openChordType(key) {
+    this._focusChord = key;
+    if (this.state.chordType && this.state.chordType[key]) return;
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    this.setState({ chordType: { ...(this.state.chordType || {}), [key]: 1 } });
+  }
+  closeChordType(key) {
+    if (!this.state.chordType || !this.state.chordType[key]) return;
+    const chordType = { ...this.state.chordType };
+    delete chordType[key];
+    this.setState({ chordType });
+  }
+  chordDbl(key, e) {
+    const now = Date.now();
+    const prev = this._tapChord;
+    const typing = !!(this.state.chordType && this.state.chordType[key]);
+    if (prev && prev.key === key && now - prev.t < 420) {
+      this._tapChord = null;
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      if (typing) this.closeChordType(key); else this.openChordType(key);
+      return;
+    }
+    this._tapChord = { key, t: now };
+  }
   setChordSlot(i, bar, slot, value) {
     this.updSong(sg => ({
       ...sg, keyEdited: !!sg.key,
@@ -4433,8 +4479,9 @@ class Component extends DCLogic {
         if (j !== i) return x;
         const cb = this.padChordBars(x);
         const cur = chordSlots(cb[bar]);
-        const a = slot === 0 ? value : cur.a;
-        const b = slot === 1 ? value : cur.b;
+        const typed = this.cleanChord(value);
+        const a = slot === 0 ? typed : cur.a;
+        const b = slot === 1 ? typed : cur.b;
         const next = [a, b].filter(Boolean).concat(cur.extras);
         cb[bar] = next.length ? next : ['.'];
         return { ...x, chords: chordsFromBars(cb) };
@@ -5223,8 +5270,14 @@ class Component extends DCLogic {
           const nBars = chordBarCount(sec);
           const chordBars = Array.from({ length: nBars }, (_, bi) => {
             const slot = chordSlots(cb[bi]);
+            const keyOf = slotN => song.id + ':' + i + ':' + bi + ':' + slotN;
+            const typeOn = slotN => !!(s.chordType && s.chordType[keyOf(slotN)]);
             return { n: String(bi + 1), a: slot.a, b: slot.b, optsA: optList(slot.a), optsB: optList(slot.b),
               aAria: 'Bar ' + (bi + 1) + ' chord', bAria: 'Bar ' + (bi + 1) + ' second chord',
+              typeA: typeOn(0), listA: !typeOn(0), kA: keyOf(0), typeB: typeOn(1), listB: !typeOn(1), kB: keyOf(1),
+              tapA: e => this.chordDbl(keyOf(0), e), tapB: e => this.chordDbl(keyOf(1), e),
+              toTypeA: () => this.openChordType(keyOf(0)), toListA: () => this.closeChordType(keyOf(0)),
+              toTypeB: () => this.openChordType(keyOf(1)), toListB: () => this.closeChordType(keyOf(1)),
               onA: e => this.setChordSlot(i, bi, 0, e.target.value), onB: e => this.setChordSlot(i, bi, 1, e.target.value) };
           });
           const chordRows = [];
