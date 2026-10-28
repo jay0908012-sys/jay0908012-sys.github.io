@@ -4878,17 +4878,25 @@ class Component extends DCLogic {
     if (has(n)) { let i = 2; while (has(n + ' ' + i)) i++; n = n + ' ' + i; }
     return n;
   }
-  saveKey(asNew) {
-    const song = this.curSong(), k = this.keyEff(), zh = this.state.lang === 'zh';
-    if (!asNew) { this.updSong(x => ({ ...x, tp: k.tp, capo: k.capo })); this.setState({ kd: null, kSave: false }); this.flash((zh ? '已保存“' : 'Saved “') + song.name + '”'); return; }
-    const name = this.keySaveName(), id = 'song' + Date.now();
+  bakeSong(song, k) {
     const n = k.tp || 0;
     const ki = keyInfo(song.key || '');
     const nextKi = ki && n ? { pc: ((ki.pc + n) % 12 + 12) % 12, minor: ki.minor } : ki;
     const flats = nextKi ? useFlats(nextKi) : false;
     const base = JSON.parse(JSON.stringify(song));
-    const copy = { ...base, id, name, key: nextKi ? keyName(nextKi) : (song.key || ''), tp: 0, capo: n ? 0 : (k.capo || 0), keyEdited: false,
+    return { ...base, key: nextKi ? keyName(nextKi) : (song.key || ''), tp: 0, capo: n ? 0 : (k.capo || 0), keyEdited: false,
       sections: n ? base.sections.map(sec => ({ ...sec, chords: shiftChart(sec.chords, n, flats), lyrics: shiftLyric(sec.lyrics, n, flats) })) : base.sections };
+  }
+  saveKey(asNew) {
+    const song = this.curSong(), k = this.keyEff(), zh = this.state.lang === 'zh';
+    const baked = this.bakeSong(song, k);
+    if (!asNew) {
+      this.setState(s => ({ kd: null, kSave: false, songs: s.songs.map(x => x.id === song.id ? baked : x) }));
+      this.flash((zh ? '已把和弦改到新调 · “' : 'Chords written in the new key · “') + song.name + '”');
+      return;
+    }
+    const name = this.keySaveName(), id = 'song' + Date.now();
+    const copy = { ...baked, id, name };
     this.stopAudio();
     this.setState(s => ({ songs: [copy].concat(s.songs), songId: id, kd: null, kSave: false, secSel: -1 }));
     this.flash((zh ? '已另存为“' : 'Saved as “') + name + '”');
@@ -5129,7 +5137,7 @@ class Component extends DCLogic {
       kReplace: () => this.saveKey(false), kSaveNew: () => this.saveKey(true),
       kReplaceLabel: (zh ? '替换“' : 'Replace “') + song.name + '”',
       kNewLabel: (zh ? '另存为新歌“' : 'Save as new “') + this.keySaveName() + '”',
-      kSaveDesc: zh ? '替换只记住移调，打开段落仍是原来的和弦。另存为新歌会把段落里的和弦，和歌词里的和弦，都改成新调。' : 'Replace only remembers the transpose, so the section still stores the original chords. Save as new writes the new key into the chord chart and the lyrics.',
+      kSaveDesc: zh ? '保存后，段落里的和弦和歌词里的和弦都会改成新调。替换改这一首，另存会留下原来的歌。' : 'Saving writes the new key into the chord chart and the lyrics. Replace updates this song. Save as new keeps the original.',
     };
     const imp = s.imp || [], impSel = imp.filter(x => x.on && !x.dup).length, impDup = imp.filter(x => x.dup).length, impAll = imp.every(x => x.dup || x.on);
     const impVals = {
