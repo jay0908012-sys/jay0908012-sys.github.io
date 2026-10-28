@@ -3549,7 +3549,13 @@ const CH_RE = /^([A-G][#b]?)([^/]*)(?:\/([A-G][#b]?))?$/;
 const xChord = (ch, n, flats) => { if (!n || !ch) return ch; const m = CH_RE.exec(ch); if (!m) return ch; const N = flats ? NOTES_F : NOTES_S, t = r => N[((pcOf(r) + n) % 12 + 12) % 12]; return t(m[1]) + m[2] + (m[3] ? '/' + t(m[3]) : ''); };
 const shiftChordTok = (tok, n, flats) => { if (!n || !tok || tok === '.' || tok === '-' || tok === '–') return tok; const norm = normChord(String(tok).trim()); return CH_RE.test(norm) ? xChord(norm, n, flats) : tok; };
 const shiftChart = (str, n, flats) => { if (!str || !n) return str || ''; return str.split('|').map(bar => bar.trim().split(/\s+/).filter(Boolean).map(t => shiftChordTok(t, n, flats)).join(' ')).join(' | '); };
-const shiftLyric = (str, n, flats) => { if (!str || !n) return str || ''; return str.replace(/\[([^\]]+)\]/g, (_, inner) => '[' + inner.split(/(\s+)/).map(part => /^\s+$/.test(part) ? part : shiftChordTok(part, n, flats)).join('') + ']'); };
+const shiftLyric = (str, n, flats) => {
+  if (!str || !n) return str || '';
+  return str.split('\n').map(line => {
+    if (!/\[/.test(line) && isChordLine(line)) return line.replace(/\S+/g, tok => { const bare = tok.replace(/^\(|\)$/g, ''); const next = shiftChordTok(bare, n, flats); return tok[0] === '(' && tok.slice(-1) === ')' ? '(' + next + ')' : next; });
+    return line.replace(/\[([^\]]+)\]/g, (_, inner) => '[' + inner.split(/(\s+)/).map(part => /^\s+$/.test(part) ? part : shiftChordTok(part, n, flats)).join('') + ']');
+  }).join('\n');
+};
 const SHAPES = {
   '': [0, 7, 12, 16, 19, 24], m: [0, 7, 12, 15, 19, 24], '7': [0, 10, 16, 19, 22, 28],
   maj7: [0, 11, 16, 19, 23, 28], m7: [0, 10, 15, 19, 22, 27], sus4: [0, 7, 12, 17, 19, 24],
@@ -4876,7 +4882,13 @@ class Component extends DCLogic {
     const song = this.curSong(), k = this.keyEff(), zh = this.state.lang === 'zh';
     if (!asNew) { this.updSong(x => ({ ...x, tp: k.tp, capo: k.capo })); this.setState({ kd: null, kSave: false }); this.flash((zh ? '已保存“' : 'Saved “') + song.name + '”'); return; }
     const name = this.keySaveName(), id = 'song' + Date.now();
-    const copy = { ...JSON.parse(JSON.stringify(song)), id, name, tp: k.tp, capo: k.capo };
+    const n = k.tp || 0;
+    const ki = keyInfo(song.key || '');
+    const nextKi = ki && n ? { pc: ((ki.pc + n) % 12 + 12) % 12, minor: ki.minor } : ki;
+    const flats = nextKi ? useFlats(nextKi) : false;
+    const base = JSON.parse(JSON.stringify(song));
+    const copy = { ...base, id, name, key: nextKi ? keyName(nextKi) : (song.key || ''), tp: 0, capo: n ? 0 : (k.capo || 0), keyEdited: false,
+      sections: n ? base.sections.map(sec => ({ ...sec, chords: shiftChart(sec.chords, n, flats), lyrics: shiftLyric(sec.lyrics, n, flats) })) : base.sections };
     this.stopAudio();
     this.setState(s => ({ songs: [copy].concat(s.songs), songId: id, kd: null, kSave: false, secSel: -1 }));
     this.flash((zh ? '已另存为“' : 'Saved as “') + name + '”');
@@ -5117,7 +5129,7 @@ class Component extends DCLogic {
       kReplace: () => this.saveKey(false), kSaveNew: () => this.saveKey(true),
       kReplaceLabel: (zh ? '替换“' : 'Replace “') + song.name + '”',
       kNewLabel: (zh ? '另存为新歌“' : 'Save as new “') + this.keySaveName() + '”',
-      kSaveDesc: (zh ? '调 ' : 'Key ') + (soundKi ? keyName(soundKi) : (kEff.tp > 0 ? '+' : '') + kEff.tp) + (kEff.capo ? (zh ? ' · 变调夹 ' + kEff.capo + ' 品' : ' · Capo ' + kEff.capo) : '') + (zh ? ' · 原来的和弦会保留' : ' · your original chords are kept'),
+      kSaveDesc: zh ? '替换只记住移调，打开段落仍是原来的和弦。另存为新歌会把段落里的和弦，和歌词里的和弦，都改成新调。' : 'Replace only remembers the transpose, so the section still stores the original chords. Save as new writes the new key into the chord chart and the lyrics.',
     };
     const imp = s.imp || [], impSel = imp.filter(x => x.on && !x.dup).length, impDup = imp.filter(x => x.dup).length, impAll = imp.every(x => x.dup || x.on);
     const impVals = {
