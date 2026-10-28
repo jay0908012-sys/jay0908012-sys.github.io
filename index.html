@@ -2465,7 +2465,7 @@ figcaption {
 .btn-block { width: 100%; margin-top: var(--space-2); justify-content: flex-start; text-align: left; }
 .song-soft .btn { border-radius: 14px; }
 .song-soft .btn-icon { border-radius: 50%; }
-.song-soft .input, .song-soft textarea.input, .song-soft select.input { border-radius: 12px; }
+.song-soft .input, .song-soft textarea.input, .song-soft select.input, .song-soft button.input { border-radius: 12px; }
 .song-soft .seg { border-radius: 999px; }
 
 /* — forms — */
@@ -2892,33 +2892,45 @@ const __ds_scope = {};
 <input class="input" value="{{ r.name }}" sc-camel-on-change="{{ r.onName }}" placeholder="{{ t.phSec }}" style="min-height:44px;font-size:16px">
 </div>
 <div id="chord-editor">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px">
+<div style="margin-bottom:6px">
 <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.chords }}</span>
-<span style="font-size:11px;color:var(--muted)">{{ t.chordTwoShort }}</span>
 </div>
-<div style="font-size:12px;color:var(--muted);margin-bottom:8px">{{ t.chordsHint }}</div>
 <sc-for list="{{ r.chordRows }}" as="row">
 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:8px">
 <sc-for list="{{ row.cells }}" as="bar">
-<div style="min-width:0;display:flex;flex-direction:column;gap:3px">
+<div style="min-width:0;display:flex;flex-direction:column;gap:3px;position:relative;z-index:{{ bar.z }}">
 <span style="font-weight:800;font-size:12px;color:var(--muted)">{{ bar.n }}</span>
 <sc-if value="{{ bar.typeA }}" hint-placeholder-val="{{ false }}">
-<input class="input" data-ctype="{{ bar.kA }}" value="{{ bar.a }}" sc-camel-on-change="{{ bar.onA }}" sc-camel-on-pointer-down="{{ bar.tapA }}" sc-camel-on-double-click="{{ bar.toListA }}" aria-label="{{ bar.aAria }}" placeholder="Cmaj7" autocapitalize="off" autocorrect="off" spellcheck="false" style="min-height:40px;font-size:15px;font-weight:800;padding:0 4px;text-align:center">
+<input class="input" data-ctype="{{ bar.kA }}" value="{{ bar.a }}" sc-camel-on-change="{{ bar.onA }}" sc-camel-on-pointer-down="{{ bar.backA }}" sc-camel-on-double-click="{{ bar.toListA }}" aria-label="{{ bar.aAria }}" placeholder="Cmaj7" autocapitalize="off" autocorrect="off" spellcheck="false" style="min-height:40px;font-size:15px;font-weight:800;padding:0 4px;text-align:center">
 </sc-if>
 <sc-if value="{{ bar.listA }}" hint-placeholder-val="{{ true }}">
-<select class="input" value="{{ bar.a }}" sc-camel-on-change="{{ bar.onA }}" sc-camel-on-pointer-down="{{ bar.tapA }}" sc-camel-on-double-click="{{ bar.toTypeA }}" aria-label="{{ bar.aAria }}" style="min-height:40px;font-size:15px;font-weight:800;padding:0 4px">
-<option value="">–</option>
-<sc-for list="{{ bar.optsA }}" as="op"><option value="{{ op.v }}">{{ op.label }}</option></sc-for>
-</select>
+<div style="position:relative">
+<button type="button" class="input" sc-camel-on-pointer-down="{{ bar.tapA }}" aria-label="{{ bar.aAria }}" style="min-height:40px;font-size:15px;font-weight:800;padding:0 4px;text-align:center;cursor:pointer">{{ bar.aShow }}</button>
+<sc-if value="{{ bar.menuA }}" hint-placeholder-val="{{ false }}">
+<button type="button" sc-camel-on-pointer-down="{{ bar.closeMenu }}" aria-label="Close" style="position:fixed;inset:0;z-index:40;background:transparent;border:0;padding:0"></button>
+<div style="position:absolute;z-index:41;left:0;right:0;top:calc(100% + 4px);background:var(--color-surface);border:1px solid var(--color-divider);border-radius:12px;overflow:auto;max-height:220px;box-shadow:0 8px 24px color-mix(in srgb, var(--color-text) 14%, transparent)">
+<sc-for list="{{ bar.menuOptsA }}" as="op">
+<button type="button" sc-camel-on-pointer-down="{{ op.pick }}" style="display:block;width:100%;min-height:36px;border:0;background:transparent;font-weight:800;font-size:15px;color:var(--color-text);cursor:pointer">{{ op.label }}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
 </sc-if>
 <sc-if value="{{ bar.typeB }}" hint-placeholder-val="{{ false }}">
-<input class="input" data-ctype="{{ bar.kB }}" value="{{ bar.b }}" sc-camel-on-change="{{ bar.onB }}" sc-camel-on-pointer-down="{{ bar.tapB }}" sc-camel-on-double-click="{{ bar.toListB }}" aria-label="{{ bar.bAria }}" placeholder="Cmaj7" autocapitalize="off" autocorrect="off" spellcheck="false" style="min-height:36px;font-size:14px;font-weight:700;padding:0 4px;text-align:center">
+<input class="input" data-ctype="{{ bar.kB }}" value="{{ bar.b }}" sc-camel-on-change="{{ bar.onB }}" sc-camel-on-pointer-down="{{ bar.backB }}" sc-camel-on-double-click="{{ bar.toListB }}" aria-label="{{ bar.bAria }}" placeholder="Cmaj7" autocapitalize="off" autocorrect="off" spellcheck="false" style="min-height:36px;font-size:14px;font-weight:700;padding:0 4px;text-align:center">
 </sc-if>
 <sc-if value="{{ bar.listB }}" hint-placeholder-val="{{ true }}">
-<select class="input" value="{{ bar.b }}" sc-camel-on-change="{{ bar.onB }}" sc-camel-on-pointer-down="{{ bar.tapB }}" sc-camel-on-double-click="{{ bar.toTypeB }}" aria-label="{{ bar.bAria }}" style="min-height:36px;font-size:14px;font-weight:700;padding:0 4px">
-<option value="">–</option>
-<sc-for list="{{ bar.optsB }}" as="op"><option value="{{ op.v }}">{{ op.label }}</option></sc-for>
-</select>
+<div style="position:relative">
+<button type="button" class="input" sc-camel-on-pointer-down="{{ bar.tapB }}" aria-label="{{ bar.bAria }}" style="min-height:36px;font-size:14px;font-weight:700;padding:0 4px;text-align:center;cursor:pointer">{{ bar.bShow }}</button>
+<sc-if value="{{ bar.menuB }}" hint-placeholder-val="{{ false }}">
+<button type="button" sc-camel-on-pointer-down="{{ bar.closeMenu }}" aria-label="Close" style="position:fixed;inset:0;z-index:40;background:transparent;border:0;padding:0"></button>
+<div style="position:absolute;z-index:41;left:0;right:0;top:calc(100% + 4px);background:var(--color-surface);border:1px solid var(--color-divider);border-radius:12px;overflow:auto;max-height:220px;box-shadow:0 8px 24px color-mix(in srgb, var(--color-text) 14%, transparent)">
+<sc-for list="{{ bar.menuOptsB }}" as="op">
+<button type="button" sc-camel-on-pointer-down="{{ op.pick }}" style="display:block;width:100%;min-height:36px;border:0;background:transparent;font-weight:800;font-size:14px;color:var(--color-text);cursor:pointer">{{ op.label }}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
 </sc-if>
 </div>
 </sc-for>
@@ -2939,7 +2951,6 @@ const __ds_scope = {};
 </div>
 </div></sc-for>
 </div>
-<div style="font-size:12px;color:var(--muted);margin-top:-6px">{{ t.repeatHint }}</div>
 <div>
 <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
 <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.beatsTap }}</span>
@@ -2977,7 +2988,6 @@ const __ds_scope = {};
 <button class="btn btn-secondary" sc-camel-on-click="{{ bo.pick }}" style="padding:6px 10px;min-height:40px;font-size:13px;justify-content:flex-start;gap:6px;max-width:100%"><span style="font-weight:800">{{ bo.label }}</span><span style="font-weight:600;color:var(--muted)">{{ bo.meta }}</span></button>
 </sc-for>
 </div>
-<div style="font-size:12px;color:var(--muted);margin-top:6px">{{ t.useBeatHint }}</div>
 </div>
 <div class="field" style="margin:0">
 <label>{{ t.subdivision }}</label>
@@ -4458,7 +4468,7 @@ class Component extends DCLogic {
     this._focusChord = key;
     if (this.state.chordType && this.state.chordType[key]) return;
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-    this.setState({ chordType: { ...(this.state.chordType || {}), [key]: 1 } });
+    this.setState({ chordType: { ...(this.state.chordType || {}), [key]: 1 }, chordMenu: '' });
   }
   closeChordType(key) {
     if (!this.state.chordType || !this.state.chordType[key]) return;
@@ -4466,17 +4476,30 @@ class Component extends DCLogic {
     delete chordType[key];
     this.setState({ chordType });
   }
-  chordDbl(key, e) {
+  chordPick(key, e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
     const now = Date.now();
     const prev = this._tapChord;
-    const typing = !!(this.state.chordType && this.state.chordType[key]);
     if (prev && prev.key === key && now - prev.t < 420) {
+      clearTimeout(prev.timer);
       this._tapChord = null;
-      if (e) { e.preventDefault(); e.stopPropagation(); }
-      if (typing) this.closeChordType(key); else this.openChordType(key);
+      this.openChordType(key);
       return;
     }
-    this._tapChord = { key, t: now };
+    if (prev && prev.timer) clearTimeout(prev.timer);
+    const timer = setTimeout(() => { this._tapChord = null; this.setState({ chordMenu: key }); }, 280);
+    this._tapChord = { key, t: now, timer };
+  }
+  chordBack(key, e) {
+    const now = Date.now();
+    const prev = this._tapBack;
+    if (prev && prev.key === key && now - prev.t < 420) {
+      this._tapBack = null;
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      this.closeChordType(key);
+      return;
+    }
+    this._tapBack = { key, t: now };
   }
   setChordSlot(i, bar, slot, value) {
     this.updSong(sg => ({
@@ -5292,12 +5315,16 @@ class Component extends DCLogic {
             const slot = chordSlots(cb[bi]);
             const keyOf = slotN => song.id + ':' + i + ':' + bi + ':' + slotN;
             const typeOn = slotN => !!(s.chordType && s.chordType[keyOf(slotN)]);
-            return { n: String(bi + 1), a: slot.a, b: slot.b, optsA: optList(slot.a), optsB: optList(slot.b),
+            const menuFor = (cur, slotN) => [{ v: '', label: '–' }].concat(optList(cur)).map(op => ({ label: op.label || '–', pick: ev => { if (ev) { ev.preventDefault(); ev.stopPropagation(); } this.setChordSlot(i, bi, slotN, op.v); this.setState({ chordMenu: '' }); } }));
+            const menuA = s.chordMenu === keyOf(0), menuB = s.chordMenu === keyOf(1);
+            return { n: String(bi + 1), a: slot.a, b: slot.b, aShow: slot.a || '–', bShow: slot.b || '–',
               aAria: 'Bar ' + (bi + 1) + ' chord', bAria: 'Bar ' + (bi + 1) + ' second chord',
               typeA: typeOn(0), listA: !typeOn(0), kA: keyOf(0), typeB: typeOn(1), listB: !typeOn(1), kB: keyOf(1),
-              tapA: e => this.chordDbl(keyOf(0), e), tapB: e => this.chordDbl(keyOf(1), e),
-              toTypeA: () => this.openChordType(keyOf(0)), toListA: () => this.closeChordType(keyOf(0)),
-              toTypeB: () => this.openChordType(keyOf(1)), toListB: () => this.closeChordType(keyOf(1)),
+              menuA, menuB, z: (menuA || menuB) ? 6 : 1, menuOptsA: menuFor(slot.a, 0), menuOptsB: menuFor(slot.b, 1),
+              tapA: e => this.chordPick(keyOf(0), e), tapB: e => this.chordPick(keyOf(1), e),
+              backA: e => this.chordBack(keyOf(0), e), backB: e => this.chordBack(keyOf(1), e),
+              toListA: () => this.closeChordType(keyOf(0)), toListB: () => this.closeChordType(keyOf(1)),
+              closeMenu: e => { if (e) { e.preventDefault(); e.stopPropagation(); } this.setState({ chordMenu: '' }); },
               onA: e => this.setChordSlot(i, bi, 0, e.target.value), onB: e => this.setChordSlot(i, bi, 1, e.target.value) };
           });
           const chordRows = [];
