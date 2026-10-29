@@ -2813,7 +2813,7 @@ const __ds_scope = {};
 <div style="padding:10px 12px;background:var(--color-surface);border-radius:16px"><div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">{{ t.length }}</div><div style="font-weight:800;font-size:22px">{{ songLength }}</div></div>
 </div>
 </sc-if>
-<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px 16px 4px">
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px 16px 4px">
 <button sc-camel-on-click="{{ toggleCursor }}" role="switch" aria-checked="{{ cursorOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 8px 10px;background:{{ cursorBg }};border:1.5px solid {{ cursorBd }};border-radius:18px">
 <span style="font-weight:800;font-size:14px;line-height:1.1;color:{{ cursorFg }};max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.cursorSwitch }}</span>
 <span aria-hidden="true" style="width:40px;height:22px;border-radius:999px;border:1.5px solid {{ cursorSw.bd }};background:{{ cursorSw.track }};display:flex;justify-content:{{ cursorSw.justify }};align-items:center;padding:1px;box-sizing:border-box"><span style="width:16px;height:16px;border-radius:50%;background:{{ cursorSw.knob }}"></span></span>
@@ -2825,6 +2825,10 @@ const __ds_scope = {};
 <button sc-camel-on-click="{{ toggleLyrFull }}" role="switch" aria-checked="{{ lyrFull }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 8px 10px;background:{{ fullBg }};border:1.5px solid {{ fullBd }};border-radius:18px">
 <span style="font-weight:800;font-size:14px;line-height:1.1;color:{{ fullFg }};max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.lyrFullSwitch }}</span>
 <span aria-hidden="true" style="width:40px;height:22px;border-radius:999px;border:1.5px solid {{ lyrFullSw.bd }};background:{{ lyrFullSw.track }};display:flex;justify-content:{{ lyrFullSw.justify }};align-items:center;padding:1px;box-sizing:border-box"><span style="width:16px;height:16px;border-radius:50%;background:{{ lyrFullSw.knob }}"></span></span>
+</button>
+<button sc-camel-on-click="{{ toggleGuitar }}" role="switch" aria-checked="{{ guitarOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 8px 10px;background:{{ gBg }};border:1.5px solid {{ gBd }};border-radius:18px">
+<span style="font-weight:800;font-size:14px;line-height:1.1;color:{{ gFg }};max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.soundSwitch }}</span>
+<span aria-hidden="true" style="width:40px;height:22px;border-radius:999px;border:1.5px solid {{ guitarSw.bd }};background:{{ guitarSw.track }};display:flex;justify-content:{{ guitarSw.justify }};align-items:center;padding:1px;box-sizing:border-box"><span style="width:16px;height:16px;border-radius:50%;background:{{ guitarSw.knob }}"></span></span>
 </button>
 </div>
 <div style="margin:12px 16px 0;padding:14px;border-radius:18px;background:var(--color-surface);display:flex;flex-direction:column;gap:12px">
@@ -3122,8 +3126,7 @@ const __ds_scope = {};
 </div>
 </div>
 </sc-if>
-<div style="flex:none;padding:8px 16px 4px;display:grid;grid-template-columns:{{ songBarCols }};gap:8px">
-<button sc-camel-on-click="{{ toggleGuitar }}" aria-pressed="{{ guitarOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ gBg }};color:{{ gFg }};border:1.5px solid {{ gBd }};border-radius:18px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>{{ t.guitarShort }}</button>
+<div style="flex:none;padding:8px 16px 12px;display:grid;grid-template-columns:{{ songBarCols }};gap:8px">
 <button sc-camel-on-click="{{ togglePluck }}" aria-pressed="{{ pluckOn }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ pBg }};color:{{ pFg }};border:1.5px solid {{ pBd }};border-radius:18px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M3 12h18"></path><path d="M3 18h18"></path><circle cx="15" cy="12" r="2.4" fill="currentColor" stroke="none"></circle></svg>{{ t.pluck }}</button>
 <sc-if value="{{ songOn }}" hint-placeholder-val="{{ false }}">
 <button sc-camel-on-click="{{ togglePause }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ pauseBg }};color:{{ pauseFg }};border:1.5px solid {{ pauseBd }};border-radius:18px">
@@ -3137,7 +3140,6 @@ const __ds_scope = {};
 {{ songPlayShort }}</button>
 <button sc-camel-on-click="{{ toggleSongLoop }}" aria-pressed="{{ songLoop }}" style="all:unset;box-sizing:border-box;cursor:pointer;min-width:0;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;font-weight:800;font-size:12px;line-height:1.1;background:{{ loopBg }};color:{{ loopFg }};border:1.5px solid {{ loopBd }};border-radius:18px"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>{{ t.loop }}</button>
 </div>
-<div style="padding:0 16px 10px;font-size:11px;color:var(--muted)">{{ t.guitarCredit }}</div>
 </div>
 </sc-if>
 
@@ -3939,8 +3941,8 @@ Object.assign(ZH, { 'First': '第一拍', 'first': '第一拍', '1': '1', 'The 1
 Object.assign(TK, { sound3: 'The 1, an accent, and a normal beat each have their own sound.', drumCredit: 'Recorded drums in this list: FluidR3 GM, CC BY 3.0.' });
 Object.assign(ZH, { 'Play': '播放', 'Stop': '停止', 'Pause': '暂停', 'Resume': '继续', 'Full screen': '全屏', 'Exit lyrics': '退出', 'Cursor': '光标', 'Guitar': '吉他', 'Tick a section to practice it. Leave them all off to play the whole song.': '勾选段落来练习。全部不勾就是播放整首歌。', 'Practice: ': '练习：', 'Practice ': '练习 ', 'Stop practicing ': '取消练习 ' });
 Object.assign(TK, { play: 'Play', stop: 'Stop', guitarShort: 'Guitar', pracHint: 'Tick a section to practice it. Leave them all off to play the whole song.' });
-Object.assign(TK, { pluck: 'Pluck', strumSnd: 'Strum', lyrFull: 'Full screen', lyrExit: 'Exit lyrics', lyrFullSwitch: 'Full screen', cursorSwitch: 'Cursor', pluckHint: 'Pluck · tap a box and pick a string, the same way you pick a chord. The top box is the first string. The one under it plays at the same time. 6E is thick, 1e is thin.' });
-Object.assign(ZH, { 'Pluck': '拨弦', 'Pluck · tap a box and pick a string, the same way you pick a chord. The top box is the first string. The one under it plays at the same time. 6E is thick, 1e is thin.': '拨弦 · 和选和弦一样，点开小列表选弦。上面是第一根，下面是同一拍一起响的第二根。6E 是粗弦，1e 是细弦。' });
+Object.assign(TK, { pluck: 'Pluck', strumSnd: 'Strum', lyrFull: 'Full screen', lyrExit: 'Exit lyrics', lyrFullSwitch: 'Full screen', cursorSwitch: 'Cursor', soundSwitch: 'Sound', pluckHint: 'Pluck · tap a box and pick a string, the same way you pick a chord. The top box is the first string. The one under it plays at the same time. 6E is thick, 1e is thin.' });
+Object.assign(ZH, { 'Pluck': '拨弦', 'Sound': '声音', 'Pluck · tap a box and pick a string, the same way you pick a chord. The top box is the first string. The one under it plays at the same time. 6E is thick, 1e is thin.': '拨弦 · 和选和弦一样，点开小列表选弦。上面是第一根，下面是同一拍一起响的第二根。6E 是粗弦，1e 是细弦。' });
 Object.assign(TK, { useBeatHint: 'Copies time, accents, subdivision, strum and pluck. The song tempo stays the same.' });
 Object.assign(ZH, { 'Copies time, accents, subdivision, strum and pluck. The song tempo stays the same.': '套用拍号、重音、细分、扫弦和拨弦。歌曲速度保持不变。' });
 const marking = b => b < 60 ? 'Largo' : b < 76 ? 'Adagio' : b < 108 ? 'Andante' : b < 120 ? 'Moderato' : b < 168 ? 'Allegro' : 'Presto';
@@ -4266,7 +4268,7 @@ class Component extends DCLogic {
     return ev;
   }
   startSong(only) {
-    if ((this.state.guitar || this.state.pluck) && !this._gNotes) {
+    if (this.state.guitar && !this._gNotes) {
       const token = (this._gTok = (this._gTok || 0) + 1);
       this.loadGuitar().then(() => { if (this._gTok === token) this.startSong(only); });
       return;
@@ -4434,10 +4436,6 @@ class Component extends DCLogic {
           }
         } else {
           if (e.click !== false) this.click(this.next, e.kind);
-          if (!e.ci && this.state.pluck) {
-            if (PLUCK_OK[e.pluck]) this.pluckString(this.next, e.chord, e.pluck);
-            if (PLUCK_OK[e.pluck2] && e.pluck2 !== e.pluck) this.pluckString(this.next, e.chord, e.pluck2);
-          }
         }
       }
       if (!late) this.queueVis(this.next, { songPos: idx });
@@ -5475,7 +5473,7 @@ class Component extends DCLogic {
       songOn, songOff: !songOn, paused: !!s.paused, pauseIcon: !s.paused, pauseLabel: s.paused ? L('Resume') : L('Pause'),
       togglePause: () => s.paused ? this.resumeSong() : this.pauseSong(),
       pauseBg: s.paused ? 'color-mix(in srgb, var(--color-accent) 16%, var(--color-surface))' : 'var(--color-surface)', pauseFg: s.paused ? 'var(--acc-text)' : ink, pauseBd: s.paused ? acc : 'var(--color-divider)',
-      songBarCols: songOn ? 'repeat(5,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))', ...np, secRows, pracNote, addSection: () => this.addSection(),
+      songBarCols: songOn ? 'repeat(4,minmax(0,1fr))' : 'repeat(3,minmax(0,1fr))', ...np, secRows, pracNote, addSection: () => this.addSection(),
       toggleSong: () => this.toggleSong(),
       songLoop: !!s.songLoop, toggleSongLoop: () => this.setState({ songLoop: !s.songLoop }),
       guitarOn: !!s.guitar, guitarSw: sw(!!s.guitar), toggleGuitar: () => { const on = !s.guitar; this.setState({ guitar: on }); if (on) this.loadGuitar(); },
